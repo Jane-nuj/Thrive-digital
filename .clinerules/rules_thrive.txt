@@ -1,0 +1,31 @@
+@ruleset thrive
+
+## Design System
+- Use Manrope for headings and Poppins for body, buttons, and forms
+- Apply Tailwind colour palette:
+  - White: #ffffff
+  - Off-white: #f2f2f2
+  - Gold (accent): #a17e29
+  - Charcoal: #2a2a2a
+  - Black: #000000
+- Maintain dark background and minimal contrast for visual calm
+
+## Layout Guidelines
+- Mobile-first responsive layout
+- Hero section uses bold stacked text
+- Contact form is full-width with gold-outline button and minimal borders
+- Footer is white on contact page, black elsewhere
+- Use `min-h-screen` to prevent layout collapse
+
+## Writing Tone
+- Confident, clear, and grounded
+- Avoid fluff or filler language
+- Use short, scannable paragraphs
+- CTA should invite without pressure (“drop me a line”)
+
+## Site Structure
+- Two pages: `Home` and `Contact`
+- Internal links only (`/contact`, `/`)
+- Layout is consistent across pages (header, footer, spacing)
+
+@end

@@ -1,31 +1,55 @@
 export default function HomePage() {
   return (
-    <main className="min-h-screen px-6 py-12 text-white bg-black">
-      <h1 className="text-4xl font-semibold mb-6">
-        Need a freelancer who has<br />
-        designed it,<br />
-        built it,<br />
-        and <span className="text-yellow-600">delivered it?</span>
-      </h1>
-      <p className="mb-4">My name is Jane Fletcher.</p>
-      <p className="mb-4">
-        I bring product, design, strategy and delivery skills to teams.
-      </p>
-      <p className="mb-8">
-        With 15+ years in digital across government, healthcare, finance and defence, I understand what matters and ensure everyone is aligned and <span className="text-yellow-600">thrives</span>.
-      </p>
-      <section className="mb-16">
-        <h2 className="italic text-xl mb-2">Project Management Philosophy</h2>
-        <p className="max-w-xl">
-          I don’t have one — by which I mean, I am concerned with the success of the project and the team, not with the use of a particular workflow to get there.
-          I work with stakeholders to design a process that makes sense for the organisation and supports its goals — and I check in regularly to see how it's performing.
+    // Removed min-h-screen here as it's handled by layout flex structure
+    // Added container and padding
+    <div className="container mx-auto px-6 py-12 md:py-20">
+
+      {/* Hero Section */}
+      <section className="mb-16 md:mb-24 max-w-3xl">
+        {/* Apply font-heading with new typography classes */}
+        <h1 className="font-heading text-h1 mb-10">
+          Need a freelancer who has<br />
+          designed it,<br />
+          built it,<br />
+          and <span className="text-gold">delivered it?</span>
+        </h1>
+        {/* Apply font-sans with new paragraph typography classes */}
+        <p className="font-sans text-p1 mb-4">My name is Jane Fletcher.</p>
+        <p className="font-sans text-p1 mb-4">
+          I bring product, design, strategy and delivery skills to teams.
+        </p>
+        <p className="font-sans text-p1 mb-8">
+          With 15+ years in digital across government, healthcare, finance and defence, I understand what matters and ensure everyone is aligned and <span className="text-gold">thrives</span>.
         </p>
       </section>
-      <footer className="bg-white text-black p-6 mt-12">
-        <p>
-          If you think I’d be a good fit for your team, <a href="/contact" className="text-yellow-600 underline">drop me a line</a>.
-        </p>
-      </footer>
-    </main>
+
+      {/* Areas of Expertise Section (Placeholder based on mockup) */}
+      <section className="mb-16 md:mb-24">
+        <h2 className="font-heading text-h3 mb-6 pb-2" style={{ lineHeight: '1em' }}>Areas of Expertise</h2>
+        {/* TODO: Populate with actual expertise items */}
+        <ul className="font-sans text-p1 list-none space-y-2">
+          <li>Digital transformation</li>
+          <li>AI strategy</li>
+          <li>Product management</li>
+          <li>Agile delivery</li>
+        </ul>
+      </section>
+
+      {/* Project Management Philosophy Section (Layout based on mobile mockup) */}
+      <section className="mb-16 md:mb-24 md:flex md:gap-12">
+        <div className="mb-4 md:mb-0 md:w-1/3">
+          <h2 className="font-heading text-h3 mb-2" style={{ lineHeight: '1em' }}>Project Management Philosophy</h2>
+          <hr className="border-gold w-16 border-t-2 mb-4 md:mb-0" />
+        </div>
+        <div className="md:w-2/3">
+          <p className="font-sans text-p1">
+            I don't have one — by which I mean, I am concerned with the success of the project and the team, not with the use of a particular workflow to get there.
+            I work with stakeholders to design a process that makes sense for the organisation and supports its goals — and I check in regularly to see how it's performing.
+          </p>
+        </div>
+      </section>
+
+      {/* Removed the old inline footer */}
+    </div>
   );
 }

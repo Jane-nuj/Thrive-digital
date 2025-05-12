@@ -2,15 +2,39 @@
 module.exports = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        'yellow-600': '#a17e29',
+        'yellow-600': '#b89739', // Updated to a brighter gold
+        'off-white': '#f2f2f2',
+        'charcoal': '#2a2a2a',
+        'black': '#000000', // Already default, but good to be explicit
+        'white': '#ffffff', // Already default, but good to be explicit
+        'gold': '#b89739', // Updated to a brighter gold for easier use
       },
       fontFamily: {
-        sans: ['Poppins', 'sans-serif'],
-        heading: ['Manrope', 'sans-serif'],
+        // Use CSS variables defined in layout.tsx
+        sans: ['var(--font-poppins)', 'sans-serif'],
+        heading: ['var(--font-manrope)', 'sans-serif'],
+      },
+      fontSize: {
+        // Heading sizes
+        'h1': ['2.5rem', { lineHeight: '1.1em', letterSpacing: '-0.02em', fontWeight: '300' }],
+        'h2': ['2.8rem', { lineHeight: '1.05em', letterSpacing: '-0.02em', fontWeight: '300' }],
+        'h3': ['2.2rem', { lineHeight: '1em', letterSpacing: '-0.02em', fontWeight: '300' }],
+        
+        // Paragraph sizes
+        'p1': ['1rem', { lineHeight: '1.2em', letterSpacing: '0.01em', fontWeight: '300' }],
+        'p2': ['1.4rem', { lineHeight: '1.2em', letterSpacing: '0.01em', fontWeight: '300' }],
+        'p3': ['0.9rem', { lineHeight: '1.2em', letterSpacing: '0.01em', fontWeight: '300' }],
+        
+        // Button size
+        'btn': ['1rem', { lineHeight: '1.2em', letterSpacing: '0em', fontWeight: '400' }],
+        
+        // Site title size
+        'site-title': ['1.5rem', { lineHeight: '0.7em', letterSpacing: '-0.02em', fontWeight: '300' }],
       },
     },
   },
