@@ -1,0 +1,4 @@
+[project]
+name = "New Cline Project"
+[settings]
+memory_bank_enabled = true
