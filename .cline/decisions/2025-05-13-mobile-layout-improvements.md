@@ -2,6 +2,7 @@
 
 ## Date
 2025-05-13
+(Updated: 2025-05-13)
 
 ## Decision
 We've made several improvements to enhance the mobile experience:
@@ -9,6 +10,7 @@ We've made several improvements to enhance the mobile experience:
 1. Fixed the hamburger menu icon positioning in the mobile header
 2. Improved the responsive typography for headings, particularly the h1 on the homepage
 3. Fixed contact page spacing issues - increased vertical spacing between navbar and title
+4. Made the contact page h1 sizing consistent with the homepage h1 on mobile views
 
 ## Implementation Details
 
@@ -47,6 +49,29 @@ The homepage hero heading (h1) was not scaling properly on smaller screens, whic
      <span className="block">and <span className="text-gold">delivered it?</span></span>
    </h1>
    ```
+
+### Contact Page Heading Consistency
+We noticed an inconsistency where the contact page h1 appeared larger than the homepage h1 on mobile devices. We addressed this by applying the same responsive text sizing approach from the homepage to the contact page heading:
+
+From:
+```tsx
+<h1 className="font-heading text-h1 mb-10 md:mb-12">
+  Let me know how I can <span className="text-gold">help</span>.
+</h1>
+```
+
+To:
+```tsx
+<h1 className="font-heading text-2xl sm:text-3xl md:text-h1 mb-10 md:mb-12 leading-relaxed">
+  Let me know how I can <span className="text-gold">help</span>.
+</h1>
+```
+
+This change:
+1. Uses the same responsive text sizing approach (`text-2xl sm:text-3xl md:text-h1`) as the homepage
+2. Maintains the smaller, more restrained typography on mobile screens
+3. Preserves the gold accent on the word "help"
+4. Adds `leading-relaxed` for consistent line height
 
 ### Contact Page Spacing
 The contact page title was positioned too close to the navigation bar and needed additional vertical spacing. We addressed this by adding specific top padding values:

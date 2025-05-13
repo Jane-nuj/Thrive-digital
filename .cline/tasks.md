@@ -24,6 +24,7 @@ Portfolio/freelancer site for Jane Fletcher with clean, minimal design featuring
 - [x] Fix contact page title spacing and alignment
 - [x] Further refine mobile spacing (particularly in hero section)
 - [x] Add proper spacing between sections on smaller screens
+- [x] Ensure h1 consistency between pages on mobile views
 - [ ] Fix LinkedIn icon size inconsistency between mobile and desktop
 
 ## Content
@@ -35,10 +36,7 @@ Portfolio/freelancer site for Jane Fletcher with clean, minimal design featuring
 - [x] Implement "How I Work" section
 - [x] Add "Work Philosophy" section
 - [ ] Add visual feedback for contact form submission (success/error states)
-- [ ] Create case studies or project examples section
-- [ ] Add client testimonials or endorsements
-- [ ] Implement a more detailed About section with professional background
-- [ ] Create an experience timeline or career highlights section
+
 
 ## Styling & Visual Refinements
 - [x] Set up brand color palette in Tailwind config

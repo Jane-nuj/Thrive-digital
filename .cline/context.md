@@ -4,6 +4,15 @@
 This is a portfolio/freelancer website for Jane Fletcher featuring a clean, minimal design with dark charcoal background and gold accents. The site uses Manrope for headings and Poppins for body text, and features a mobile-first responsive layout with a working contact form.
 
 ## Recent Updates (2025-05-13)
+### Mobile Typography Consistency Fix
+We fixed an inconsistency in heading sizes between pages on mobile:
+1. The contact page h1 ("Let me know how I can help") was appearing larger than the homepage h1 ("Need a contractor who has") in mobile view
+2. Updated the contact page h1 to use the same responsive text sizing approach as the homepage (`text-2xl sm:text-3xl md:text-h1`)
+3. Added `leading-relaxed` class for consistent line height
+4. Maintained the gold accent for the word "help" while adjusting the overall size
+
+This change ensures both headings scale proportionally as viewport sizes change, with the more restrained typography on smaller screens that was preferred.
+
 ### Homepage Content Update
 We've implemented a comprehensive update to the homepage content and layout:
 

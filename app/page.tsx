@@ -48,7 +48,11 @@ export default function HomePage() {
               </div>
             </div>
             <div className="font-sans text-p1 border-l-2 border-gold pl-6 py-12 my-20 max-w-3xl">
-              <p>What sets me apart is my hands-on experience across the entire product lifecycle. I've personally designed, built, and shipped the solutions I advise on. This practical approach means you get expertise that's been tested in the real world, not just in theory.</p>
+              <p>
+                What sets me apart is my hands-on experience across the entire product lifecycle.<br />
+                I've personally designed, built, and shipped the solutions I advise on.<br />
+                This practical approach means you get expertise that's been tested in the real world, not just in theory.
+              </p>
             </div>
           </section>
 
