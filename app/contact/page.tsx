@@ -85,6 +85,9 @@ const validateMessage = (value: string): string => {
   return "";
 };
 
+// Helper to detect if we're in development mode
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export default function ContactPage() {
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", subject: "", message: "" });
   const [errors, setErrors] = useState<ValidationErrors>({});
@@ -94,6 +97,10 @@ export default function ContactPage() {
   const [formState, setFormState] = useState<FormState>('idle');
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [errorType, setErrorType] = useState<ErrorType>('general');
+  
+  // Development-only state for API simulation
+  const [devSimulateSuccess, setDevSimulateSuccess] = useState<boolean>(true);
+  const [devErrorType, setDevErrorType] = useState<ErrorType>('server');
   
   // References to form fields for focus management
   const fieldRefs = {
@@ -218,7 +225,27 @@ export default function ContactPage() {
     // Set to submitting state
     setFormState('submitting');
     
+    // Simulate processing time for better UX testing
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
     try {
+      // In development, simulate API based on settings
+      if (isDevelopment && devSimulateSuccess === false) {
+        // Simulate an error response based on selected error type
+        const errorMessages = {
+          validation: "Validation failed on the server.",
+          server: "The server encountered an error while processing your request.",
+          network: "Network error. Please check your connection and try again.",
+          general: "An unknown error occurred. Please try again later."
+        };
+        
+        setFormState('error');
+        setErrorMessage(errorMessages[devErrorType]);
+        setErrorType(devErrorType);
+        return;
+      }
+      
+      // In production or if simulation is set to success, proceed with real request
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -243,6 +270,11 @@ export default function ContactPage() {
       setErrorMessage('Network error. Please check your connection and try again.');
       setErrorType('network');
     }
+  };
+
+  // Helper to determine if a button should show spinner state
+  const isButtonSubmitting = (state: FormState): boolean => {
+    return state === 'validating' || state === 'submitting';
   };
 
   // Render different content based on form state
@@ -380,13 +412,13 @@ export default function ContactPage() {
                 )}
               </div>
 
-              {/* Submit Button */}
-              <div className="mt-[30px]">
-                <SubmitButton 
-                  isSubmitting={false}
-                  disabled={false}
-                />
-              </div>
+            {/* Submit Button */}
+            <div className="mt-[30px]">
+              <SubmitButton 
+                isSubmitting={true} // Always show spinner in error state retry form
+                disabled={false}
+              />
+            </div>
             </form>
           </div>
         );
@@ -596,10 +628,49 @@ export default function ContactPage() {
             {/* Submit Button */}
             <div className="mt-[30px]">
               <SubmitButton
-                isSubmitting={formState === 'validating'}
+                isSubmitting={isButtonSubmitting(formState)}
                 disabled={false}
               />
             </div>
+            
+            {/* Development testing controls */}
+            {isDevelopment && (
+              <div className="bg-gray-800 p-4 mt-8 border border-gray-700 rounded text-sm">
+                <h3 className="font-medium mb-2 text-white">Development Testing Controls</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-4">
+                    <label className="inline-flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={devSimulateSuccess}
+                        onChange={() => setDevSimulateSuccess(!devSimulateSuccess)}
+                        className="rounded border-gray-600 text-gold focus:ring-gold"
+                      />
+                      <span className="ml-2">Simulate Success</span>
+                    </label>
+                  </div>
+                  
+                  {!devSimulateSuccess && (
+                    <div className="flex flex-col space-y-2">
+                      <label className="text-sm text-gray-300">Error Type:</label>
+                      <select
+                        value={devErrorType}
+                        onChange={(e) => setDevErrorType(e.target.value as ErrorType)}
+                        className="bg-gray-700 border border-gray-600 rounded py-1 px-2 text-white text-sm focus:outline-none focus:border-gold"
+                      >
+                        <option value="server">Server Error</option>
+                        <option value="network">Network Error</option>
+                        <option value="validation">Validation Error</option>
+                        <option value="general">General Error</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+                <p className="text-xs text-gray-400 mt-3">
+                  These controls only appear in development mode
+                </p>
+              </div>
+            )}
           </form>
         );
     }
@@ -608,22 +679,45 @@ export default function ContactPage() {
   // Add focus management effect
   useEffect(() => {
     // When form state changes, manage focus appropriately
-    if (formState === 'success') {
-      // Success message will get focus via autoFocus
-    } else if (formState === 'error') {
-      // Error message will get focus via autoFocus
+    if (formState === 'success' || formState === 'error') {
+      // Focus management is handled by autoFocus in the components
+      
+      // Announce state change to screen readers
+      const message = formState === 'success' 
+        ? 'Your message was sent successfully.' 
+        : 'There was a problem sending your message.';
+        
+      // Create and use a live region for announcements
+      const liveRegion = document.createElement('div');
+      liveRegion.setAttribute('aria-live', 'assertive');
+      liveRegion.setAttribute('role', 'status');
+      liveRegion.classList.add('sr-only');
+      document.body.appendChild(liveRegion);
+      
+      // Delay the announcement slightly to ensure it's read after the component mounts
+      setTimeout(() => {
+        liveRegion.textContent = message;
+        
+        // Clean up after announcement
+        setTimeout(() => {
+          document.body.removeChild(liveRegion);
+        }, 1000);
+      }, 100);
     }
-    
-    // Cleanup function
-    return () => {
-      // Any cleanup needed for focus management
-    };
   }, [formState]);
 
   return (
-    <div className="bg-charcoal text-white py-12 pt-16 md:py-20 md:pt-24">
+    <main id="main-content" tabIndex={-1} className="bg-charcoal text-white py-12 pt-16 md:py-20 md:pt-24">
       <div className="layout-container">
         <div className="content-padding">
+          {/* Skip to content link (visually hidden until focused) */}
+          <a 
+            href="#contact-form" 
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-[#b77f0f] px-4 py-2 text-white"
+          >
+            Skip to contact form
+          </a>
+          
           {/* Two-column layout for desktop */}
           <div className="flex flex-col md:flex-row md:space-x-16 lg:space-x-24">
             {/* Left column with heading */}
@@ -634,13 +728,12 @@ export default function ContactPage() {
             </div>
             
             {/* Right column with form */}
-            <div className="md:w-1/2">
+            <div id="contact-form" className="md:w-1/2">
               {renderFormContent()}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
-
