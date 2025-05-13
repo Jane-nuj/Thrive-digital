@@ -106,7 +106,7 @@ export default function ContactPage() {
           <div className="flex flex-col md:flex-row md:space-x-16 lg:space-x-24">
             {/* Left column with heading */}
             <div className="md:w-1/2 mb-10 md:mb-0">
-              <h1 className="font-heading text-h1 mb-10 md:mb-12">
+              <h1 className="font-heading text-2xl sm:text-3xl md:text-h1 mb-10 md:mb-12 leading-relaxed">
                 Let me know how I can <span className="text-gold">help</span>.
               </h1>
             </div>
