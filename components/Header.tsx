@@ -14,16 +14,16 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-charcoal text-white py-6 pt-8 shadow-md">
       <div className="layout-container">
-        <nav className="header-content flex justify-between items-center">
+        <nav className="flex justify-start items-center">
           {/* Logo */}
-          <div className="logo-container">
+          <div className="content-padding">
             <Link href="/">
               <Logo width={180} height={40} />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-6 ml-auto">
             <Link 
               href="/contact" 
               className={`${pathname === '/contact' ? 'border-b-2 border-gold' : 'hover:text-gold'} font-sans text-p1 flex items-center`}
@@ -48,7 +48,7 @@ export default function Header() {
           </div>
 
           {/* Mobile Navigation Toggle */}
-          <div className="md:hidden">
+          <div className="md:hidden ml-auto">
             <button 
               className="text-white hover:text-gold focus:outline-none transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

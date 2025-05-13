@@ -2,16 +2,16 @@ export default function HomePage() {
   return (
     <div className="py-12 md:py-20">
       <div className="layout-container">
-        <div className="main-content">
+        <div className="content-padding">
 
           {/* Hero Section */}
           <section className="mb-16 md:mb-24 max-w-3xl">
             {/* Apply font-heading with new typography classes */}
-            <h1 className="font-heading text-h1 mb-10">
-              Need a freelancer who has<br />
-              designed it,<br />
-              built it,<br />
-              and <span className="text-gold">delivered it?</span>
+            <h1 className="font-heading text-2xl sm:text-3xl md:text-h1 mb-10 leading-tight">
+              <span className="block">Need a freelancer who has</span>
+              <span className="block">designed it,</span>
+              <span className="block">built it,</span>
+              <span className="block">and <span className="text-gold">delivered it?</span></span>
             </h1>
             {/* Apply font-sans with new paragraph typography classes */}
             <p className="font-sans text-p1 mb-4">My name is Jane Fletcher.</p>
