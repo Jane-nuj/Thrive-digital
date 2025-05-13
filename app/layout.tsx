@@ -29,10 +29,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // Apply font variables to the html tag for global access
     <html lang="en" className={`${poppins.variable} ${manrope.variable}`}>
       {/* Apply Poppins as the default body font */}
-      {/* Added flex structure to potentially help with footer positioning */}
+      {/* Flex structure to help with footer positioning */}
       <body className={`${poppins.className} bg-charcoal text-white flex flex-col min-h-screen`}>
         <Header />
-        {/* Added flex-grow to make main content area fill available space */}
+        {/* flex-grow to make main content area fill available space */}
         <main className="flex-grow">
           {children}
         </main>

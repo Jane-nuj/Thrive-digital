@@ -2,7 +2,7 @@ export default function HomePage() {
   return (
     // Removed min-h-screen here as it's handled by layout flex structure
     // Added container and padding
-    <div className="container mx-auto px-6 py-12 md:py-20">
+    <div className="container mx-auto px-6 py-12 md:py-20 pl-6">
 
       {/* Hero Section */}
       <section className="mb-16 md:mb-24 max-w-3xl">

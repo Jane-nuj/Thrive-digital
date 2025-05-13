@@ -1,4 +1,12 @@
-[project]
-name = "New Cline Project"
-[settings]
-memory_bank_enabled = true
+{
+  "project": {
+    "name": "Thrive Digital"
+  },
+  "settings": {
+    "memory_bank_enabled": true,
+    "includeOpenFiles": false
+  },
+  "rules": ["rules_thrive.txt"],
+  "memory": [],
+  "tasks": "tasks.md"
+}

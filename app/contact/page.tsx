@@ -1,6 +1,41 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+// Custom button component that ensures white text
+const WhiteTextButton = ({ isSubmitting, text }: { isSubmitting: boolean, text: string }) => {
+  return (
+    <div 
+      className="relative inline-block"
+      style={{
+        minWidth: "100px", 
+        height: "42px"
+      }}
+    >
+      {/* Hidden button with original styling for positioning and hover effects */}
+      <button 
+        type="submit"
+        className="absolute inset-0 bg-transparent border border-[#b77f0f] px-[32px] py-[12px] text-[16px] hover:bg-[#b77f0f] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-sans transition-colors duration-300"
+        disabled={isSubmitting}
+        style={{
+          color: "transparent", // Hide the text color
+          width: "100%",
+          height: "100%"
+        }}
+      >
+        {text}
+      </button>
+      
+      {/* White text overlay that stays white */}
+      <div 
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        style={{ color: isSubmitting ? "#ffffff" : "#ffffff" }}
+      >
+        {text}
+      </div>
+    </div>
+  );
+};
 
 export default function ContactPage() {
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", subject: "", message: "" });
@@ -58,7 +93,7 @@ export default function ContactPage() {
 
   return (
     <div className="bg-charcoal text-white">
-      <div className="container mx-auto px-6 py-12 md:py-20">
+      <div className="container mx-auto px-6 py-12 md:py-20 pl-6">
         {/* Form status message */}
         {submitStatus.message && (
           <div className={`mb-8 p-4 rounded ${submitStatus.success ? 'bg-green-900 text-white' : 'bg-red-900 text-white'}`}>
@@ -77,84 +112,83 @@ export default function ContactPage() {
           
           {/* Right column with form */}
           <div className="md:w-1/2">
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-[30px] max-w-[800px]">
               {/* Name Fields */}
               <div>
-                <label htmlFor="firstName" className="block text-p3 text-gray-300 mb-2">Name <span className="text-xs text-gray-400">(required)</span></label>
-                <div className="flex flex-col md:flex-row gap-6 md:gap-4">
-                  <input 
-                    id="firstName" 
-                    name="firstName" 
-                    placeholder="First Name" 
-                    value={form.firstName}
-                    required 
-                    className="flex-1 py-2 px-0 bg-transparent border-b border-gray-600 focus:outline-none focus:border-gold transition-colors font-sans text-p1" 
-                    onChange={handleChange} 
-                  />
-                  <input 
-                    name="lastName" 
-                    placeholder="Last Name" 
-                    value={form.lastName}
-                    required 
-                    className="flex-1 py-2 px-0 bg-transparent border-b border-gray-600 focus:outline-none focus:border-gold transition-colors font-sans text-p1" 
-                    onChange={handleChange} 
-                  />
+                <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
+                  <div className="flex-1">
+                    <label htmlFor="firstName" className="block text-[14px] text-white opacity-80 mb-1">First Name</label>
+                    <input 
+                      id="firstName" 
+                      name="firstName" 
+                      value={form.firstName}
+                      required 
+                      className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] focus:outline-none focus:border-gold transition-colors font-sans text-white" 
+                      onChange={handleChange} 
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label htmlFor="lastName" className="block text-[14px] text-white opacity-80 mb-1">Last Name</label>
+                    <input 
+                      id="lastName"
+                      name="lastName" 
+                      value={form.lastName}
+                      required 
+                      className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] focus:outline-none focus:border-gold transition-colors font-sans text-white" 
+                      onChange={handleChange} 
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Email Field */}
               <div>
-                <label htmlFor="email" className="block text-p3 text-gray-300 mb-2">Email <span className="text-xs text-gray-400">(required)</span></label>
+                <label htmlFor="email" className="block text-[18px] tracking-[0.5px] text-white mb-2">Email <span className="text-[13px] text-white opacity-65">(required)</span></label>
                 <input 
                   id="email" 
                   name="email" 
-                  placeholder="your.email@example.com" 
                   type="email" 
                   value={form.email}
                   required 
-                  className="w-full py-2 px-0 bg-transparent border-b border-gray-600 focus:outline-none focus:border-gold transition-colors font-sans text-p1" 
+                  className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] focus:outline-none focus:border-gold transition-colors font-sans text-white" 
                   onChange={handleChange} 
                 />
               </div>
 
               {/* Subject Field */}
               <div>
-                <label htmlFor="subject" className="block text-p3 text-gray-300 mb-2">Subject <span className="text-xs text-gray-400">(required)</span></label>
+                <label htmlFor="subject" className="block text-[18px] tracking-[0.5px] text-white mb-2">Subject <span className="text-[13px] text-white opacity-65">(required)</span></label>
                 <input 
                   id="subject" 
                   name="subject" 
-                  placeholder="What can I help you with?" 
                   value={form.subject}
                   required 
-                  className="w-full py-2 px-0 bg-transparent border-b border-gray-600 focus:outline-none focus:border-gold transition-colors font-sans text-p1" 
+                  className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] focus:outline-none focus:border-gold transition-colors font-sans text-white" 
                   onChange={handleChange} 
                 />
               </div>
 
               {/* Message Field */}
               <div>
-                <label htmlFor="message" className="block text-p3 text-gray-300 mb-2">Message <span className="text-xs text-gray-400">(required)</span></label>
+                <label htmlFor="message" className="block text-[18px] tracking-[0.5px] text-white mb-2">Message <span className="text-[13px] text-white opacity-65">(required)</span></label>
                 <textarea 
                   id="message" 
                   name="message" 
-                  placeholder="Your message here..." 
                   value={form.message}
                   required 
-                  rows={6} 
-                  className="w-full py-2 px-0 bg-transparent border-b border-gray-600 focus:outline-none focus:border-gold transition-colors font-sans text-p1" 
+                  style={{ minHeight: '120px' }}
+                  className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] focus:outline-none focus:border-gold transition-colors font-sans text-white resize-y" 
                   onChange={handleChange}
                 ></textarea>
               </div>
 
               {/* Submit Button */}
-              <div>
-                <button 
-                  type="submit" 
-                  className="border border-gold text-gold px-8 py-2 hover:bg-gold hover:text-black transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-charcoal disabled:opacity-50 disabled:cursor-not-allowed font-sans text-btn"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Sending...' : 'Send'}
-                </button>
+              <div className="mt-[30px]">
+                <WhiteTextButton
+                  isSubmitting={isSubmitting}
+                  text={isSubmitting ? 'Sending...' : 'Send'}
+                />
               </div>
             </form>
           </div>

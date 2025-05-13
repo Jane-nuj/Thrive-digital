@@ -16,8 +16,8 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-charcoal text-white px-6 py-6 pt-8">
-      <nav className="container mx-auto flex justify-between items-center">
+    <header className="sticky top-0 z-50 bg-charcoal text-white px-6 py-6 pt-8 shadow-md">
+      <nav className="container mx-auto flex justify-between items-center pl-6">
         {/* Logo */}
         <Link href="/">
           <Logo width={180} height={40} />
@@ -27,7 +27,8 @@ export default function Header() {
         <div className="hidden md:flex items-center space-x-6">
           <Link 
             href="/contact" 
-            className={`${pathname === '/contact' ? 'border-b-2 border-gold text-gold' : 'hover:text-gold'} font-sans text-p1 flex items-center`}
+            className={`${pathname === '/contact' ? 'border-b-2 border-gold' : 'hover:text-gold'} font-sans text-p1 flex items-center`}
+            style={pathname === '/contact' ? { color: '#ffffff' } : {}}  
           >
             Contact
           </Link>
