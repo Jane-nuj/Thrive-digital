@@ -1,6 +1,13 @@
+
 'use client';
 
 import { useState, useEffect, useRef } from "react";
+import SuccessMessage from "../../components/contact/SuccessMessage";
+import ErrorMessage from "../../components/contact/ErrorMessage";
+import SubmitButton from "../../components/contact/SubmitButton";
+
+// Form state type
+type FormState = 'idle' | 'validating' | 'submitting' | 'success' | 'error';
 
 // Validation helper types
 type ValidationErrors = {
@@ -10,6 +17,9 @@ type ValidationErrors = {
 type TouchedFields = {
   [key: string]: boolean;
 };
+
+// Error type for better error handling
+type ErrorType = 'validation' | 'server' | 'network' | 'general';
 
 // Custom button component that ensures white text
 const WhiteTextButton = ({ isSubmitting, text }: { isSubmitting: boolean, text: string }) => {
@@ -79,11 +89,11 @@ export default function ContactPage() {
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", subject: "", message: "" });
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [touched, setTouched] = useState<TouchedFields>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{
-    success: boolean;
-    message: string;
-  } | null>(null);
+  
+  // Enhanced state management
+  const [formState, setFormState] = useState<FormState>('idle');
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorType, setErrorType] = useState<ErrorType>('general');
   
   // References to form fields for focus management
   const fieldRefs = {
@@ -169,17 +179,44 @@ export default function ContactPage() {
     return Object.values(fieldValidations).every(isValid => isValid);
   };
 
+  // Reset form function 
+  const resetForm = () => {
+    setForm({ firstName: "", lastName: "", email: "", subject: "", message: "" });
+    setErrors({});
+    setTouched({});
+    setFormState('idle');
+    setErrorMessage("");
+    setErrorType('general');
+    
+    // Focus on first field after reset
+    setTimeout(() => {
+      fieldRefs.firstName.current?.focus();
+    }, 100);
+  };
+
+  // Retry submission function
+  const handleRetry = () => {
+    setFormState('idle');
+    setErrorMessage("");
+  };
+
   // Handle form submission with API route
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
+    // Set to validating state
+    setFormState('validating');
+    
     // Validate all fields before submission
     if (!validateForm()) {
-      return; // Stop submission if validation fails
+      setFormState('error');
+      setErrorMessage("Please correct the errors in the form.");
+      setErrorType('validation');
+      return;
     }
     
-    setIsSubmitting(true);
-    setSubmitStatus(null);
+    // Set to submitting state
+    setFormState('submitting');
     
     try {
       const response = await fetch('/api/contact', {
@@ -193,40 +230,400 @@ export default function ContactPage() {
       const data = await response.json();
       
       if (response.ok) {
-        setSubmitStatus({
-          success: true,
-          message: data.message || 'Your message has been sent successfully. Thank you for reaching out!',
-        });
-        // Reset form
-        setForm({ firstName: "", lastName: "", email: "", subject: "", message: "" });
+        setFormState('success');
+        // Don't reset form immediately since we'll show the success message
       } else {
-        setSubmitStatus({
-          success: false,
-          message: data.error || 'An error occurred while sending your message. Please try again.',
-        });
+        setFormState('error');
+        setErrorMessage(data.error || 'An error occurred while sending your message. Please try again.');
+        setErrorType('server');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      setSubmitStatus({
-        success: false,
-        message: 'Network error. Please check your connection and try again.',
-      });
-    } finally {
-      setIsSubmitting(false);
+      setFormState('error');
+      setErrorMessage('Network error. Please check your connection and try again.');
+      setErrorType('network');
     }
   };
+
+  // Render different content based on form state
+  const renderFormContent = () => {
+    switch (formState) {
+      case 'success':
+        return <SuccessMessage 
+                 firstName={form.firstName} 
+                 onReset={resetForm} 
+               />;
+      
+      case 'error':
+        return (
+          <div>
+            <ErrorMessage 
+              errorType={errorType}
+              message={errorMessage} 
+              onRetry={handleRetry} 
+            />
+            
+            <form onSubmit={handleSubmit} className="space-y-[30px] max-w-[800px] mt-6">
+              {/* Name Fields */}
+              <div>
+                <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
+                  <div className="flex-1">
+                    <label htmlFor="firstName" className="block text-[14px] text-white opacity-80 mb-1">First Name</label>
+                    <input 
+                      id="firstName" 
+                      name="firstName" 
+                      value={form.firstName}
+                      ref={fieldRefs.firstName}
+                      required 
+                      className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.firstName && touched.firstName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      aria-invalid={errors.firstName && touched.firstName ? "true" : "false"}
+                      aria-describedby={errors.firstName && touched.firstName ? "firstName-error" : undefined}
+                    />
+                    {errors.firstName && touched.firstName && (
+                      <p id="firstName-error" className="text-red-400 text-[14px] mt-1">
+                        {errors.firstName}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <label htmlFor="lastName" className="block text-[14px] text-white opacity-80 mb-1">Last Name</label>
+                    <input 
+                      id="lastName"
+                      name="lastName" 
+                      value={form.lastName}
+                      ref={fieldRefs.lastName}
+                      required 
+                      className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.lastName && touched.lastName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      aria-invalid={errors.lastName && touched.lastName ? "true" : "false"}
+                      aria-describedby={errors.lastName && touched.lastName ? "lastName-error" : undefined}
+                    />
+                    {errors.lastName && touched.lastName && (
+                      <p id="lastName-error" className="text-red-400 text-[14px] mt-1">
+                        {errors.lastName}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Rest of form fields */}
+              {/* Email */}
+              <div>
+                <label htmlFor="email" className="block text-[18px] tracking-[0.5px] text-white mb-2">Email <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                <input 
+                  id="email" 
+                  name="email" 
+                  type="email" 
+                  value={form.email}
+                  ref={fieldRefs.email}
+                  required 
+                  className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.email && touched.email ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-invalid={errors.email && touched.email ? "true" : "false"}
+                  aria-describedby={errors.email && touched.email ? "email-error" : undefined}
+                />
+                {errors.email && touched.email && (
+                  <p id="email-error" className="text-red-400 text-[14px] mt-1">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+
+              {/* Subject */}
+              <div>
+                <label htmlFor="subject" className="block text-[18px] tracking-[0.5px] text-white mb-2">Subject <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                <input 
+                  id="subject" 
+                  name="subject" 
+                  value={form.subject}
+                  ref={fieldRefs.subject}
+                  required 
+                  className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.subject && touched.subject ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-invalid={errors.subject && touched.subject ? "true" : "false"}
+                  aria-describedby={errors.subject && touched.subject ? "subject-error" : undefined}
+                />
+                {errors.subject && touched.subject && (
+                  <p id="subject-error" className="text-red-400 text-[14px] mt-1">
+                    {errors.subject}
+                  </p>
+                )}
+              </div>
+
+              {/* Message */}
+              <div>
+                <label htmlFor="message" className="block text-[18px] tracking-[0.5px] text-white mb-2">Message <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                <textarea 
+                  id="message" 
+                  name="message" 
+                  value={form.message}
+                  ref={fieldRefs.message}
+                  required 
+                  style={{ minHeight: '120px' }}
+                  className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.message && touched.message ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white resize-y`}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-invalid={errors.message && touched.message ? "true" : "false"}
+                  aria-describedby={errors.message && touched.message ? "message-error" : undefined}
+                ></textarea>
+                {errors.message && touched.message && (
+                  <p id="message-error" className="text-red-400 text-[14px] mt-1">
+                    {errors.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <div className="mt-[30px]">
+                <SubmitButton 
+                  isSubmitting={false}
+                  disabled={false}
+                />
+              </div>
+            </form>
+          </div>
+        );
+      
+      case 'submitting':
+        // Show form with disabled fields during submission
+        return (
+          <div className="relative">
+            <form className="space-y-[30px] max-w-[800px] opacity-75">
+              {/* Form fields with the same structure but all disabled */}
+              {/* Name Fields */}
+              <div>
+                <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
+                  <div className="flex-1">
+                    <label htmlFor="firstName" className="block text-[14px] text-white opacity-80 mb-1">First Name</label>
+                    <input 
+                      disabled
+                      id="firstName" 
+                      name="firstName" 
+                      value={form.firstName}
+                      className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] font-sans text-white cursor-not-allowed"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label htmlFor="lastName" className="block text-[14px] text-white opacity-80 mb-1">Last Name</label>
+                    <input 
+                      disabled
+                      id="lastName"
+                      name="lastName" 
+                      value={form.lastName}
+                      className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] font-sans text-white cursor-not-allowed"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Email Field */}
+              <div>
+                <label htmlFor="email" className="block text-[18px] tracking-[0.5px] text-white mb-2">Email <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                <input 
+                  disabled
+                  id="email" 
+                  name="email" 
+                  type="email" 
+                  value={form.email}
+                  className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] font-sans text-white cursor-not-allowed"
+                />
+              </div>
+
+              {/* Subject Field */}
+              <div>
+                <label htmlFor="subject" className="block text-[18px] tracking-[0.5px] text-white mb-2">Subject <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                <input 
+                  disabled
+                  id="subject" 
+                  name="subject" 
+                  value={form.subject}
+                  className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] font-sans text-white cursor-not-allowed"
+                />
+              </div>
+
+              {/* Message Field */}
+              <div>
+                <label htmlFor="message" className="block text-[18px] tracking-[0.5px] text-white mb-2">Message <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                <textarea 
+                  disabled
+                  id="message" 
+                  name="message" 
+                  value={form.message}
+                  style={{ minHeight: '120px' }}
+                  className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] font-sans text-white resize-none cursor-not-allowed"
+                ></textarea>
+              </div>
+
+              {/* Submit Button */}
+              <div className="mt-[30px]">
+                <SubmitButton isSubmitting={true} disabled={true} />
+              </div>
+            </form>
+            
+            {/* Screen reader announcement */}
+            <div className="sr-only" aria-live="polite">
+              Sending your message, please wait...
+            </div>
+          </div>
+        );
+      
+      default: // 'idle' or 'validating'
+        return (
+          <form onSubmit={handleSubmit} className="space-y-[30px] max-w-[800px]" aria-busy={formState === 'validating'}>
+            {/* Name Fields */}
+            <div>
+              <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
+              <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
+                <div className="flex-1">
+                  <label htmlFor="firstName" className="block text-[14px] text-white opacity-80 mb-1">First Name</label>
+                  <input 
+                    id="firstName" 
+                    name="firstName" 
+                    value={form.firstName}
+                    ref={fieldRefs.firstName}
+                    required 
+                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.firstName && touched.firstName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    aria-invalid={errors.firstName && touched.firstName ? "true" : "false"}
+                    aria-describedby={errors.firstName && touched.firstName ? "firstName-error" : undefined}
+                  />
+                  {errors.firstName && touched.firstName && (
+                    <p id="firstName-error" className="text-red-400 text-[14px] mt-1">
+                      {errors.firstName}
+                    </p>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <label htmlFor="lastName" className="block text-[14px] text-white opacity-80 mb-1">Last Name</label>
+                  <input 
+                    id="lastName"
+                    name="lastName" 
+                    value={form.lastName}
+                    ref={fieldRefs.lastName}
+                    required 
+                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.lastName && touched.lastName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    aria-invalid={errors.lastName && touched.lastName ? "true" : "false"}
+                    aria-describedby={errors.lastName && touched.lastName ? "lastName-error" : undefined}
+                  />
+                  {errors.lastName && touched.lastName && (
+                    <p id="lastName-error" className="text-red-400 text-[14px] mt-1">
+                      {errors.lastName}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block text-[18px] tracking-[0.5px] text-white mb-2">Email <span className="text-[13px] text-white opacity-65">(required)</span></label>
+              <input 
+                id="email" 
+                name="email" 
+                type="email" 
+                value={form.email}
+                ref={fieldRefs.email}
+                required 
+                className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.email && touched.email ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                aria-invalid={errors.email && touched.email ? "true" : "false"}
+                aria-describedby={errors.email && touched.email ? "email-error" : undefined}
+              />
+              {errors.email && touched.email && (
+                <p id="email-error" className="text-red-400 text-[14px] mt-1">
+                  {errors.email}
+                </p>
+              )}
+            </div>
+
+            {/* Subject Field */}
+            <div>
+              <label htmlFor="subject" className="block text-[18px] tracking-[0.5px] text-white mb-2">Subject <span className="text-[13px] text-white opacity-65">(required)</span></label>
+              <input 
+                id="subject" 
+                name="subject" 
+                value={form.subject}
+                ref={fieldRefs.subject}
+                required 
+                className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.subject && touched.subject ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                aria-invalid={errors.subject && touched.subject ? "true" : "false"}
+                aria-describedby={errors.subject && touched.subject ? "subject-error" : undefined}
+              />
+              {errors.subject && touched.subject && (
+                <p id="subject-error" className="text-red-400 text-[14px] mt-1">
+                  {errors.subject}
+                </p>
+              )}
+            </div>
+
+            {/* Message Field */}
+            <div>
+              <label htmlFor="message" className="block text-[18px] tracking-[0.5px] text-white mb-2">Message <span className="text-[13px] text-white opacity-65">(required)</span></label>
+              <textarea 
+                id="message" 
+                name="message" 
+                value={form.message}
+                ref={fieldRefs.message}
+                required 
+                style={{ minHeight: '120px' }}
+                className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.message && touched.message ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white resize-y`}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                aria-invalid={errors.message && touched.message ? "true" : "false"}
+                aria-describedby={errors.message && touched.message ? "message-error" : undefined}
+              ></textarea>
+              {errors.message && touched.message && (
+                <p id="message-error" className="text-red-400 text-[14px] mt-1">
+                  {errors.message}
+                </p>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <div className="mt-[30px]">
+              <SubmitButton
+                isSubmitting={formState === 'validating'}
+                disabled={false}
+              />
+            </div>
+          </form>
+        );
+    }
+  };
+
+  // Add focus management effect
+  useEffect(() => {
+    // When form state changes, manage focus appropriately
+    if (formState === 'success') {
+      // Success message will get focus via autoFocus
+    } else if (formState === 'error') {
+      // Error message will get focus via autoFocus
+    }
+    
+    // Cleanup function
+    return () => {
+      // Any cleanup needed for focus management
+    };
+  }, [formState]);
 
   return (
     <div className="bg-charcoal text-white py-12 pt-16 md:py-20 md:pt-24">
       <div className="layout-container">
         <div className="content-padding">
-          {/* Form status message */}
-          {submitStatus && (
-            <div className={`mb-8 p-4 rounded ${submitStatus.success ? 'bg-green-900 text-white' : 'bg-red-900 text-white'}`}>
-              {submitStatus.message}
-            </div>
-          )}
-          
           {/* Two-column layout for desktop */}
           <div className="flex flex-col md:flex-row md:space-x-16 lg:space-x-24">
             {/* Left column with heading */}
@@ -238,130 +635,7 @@ export default function ContactPage() {
             
             {/* Right column with form */}
             <div className="md:w-1/2">
-              <form onSubmit={handleSubmit} className="space-y-[30px] max-w-[800px]">
-                {/* Name Fields */}
-                <div>
-                  <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
-                  <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
-                    <div className="flex-1">
-                      <label htmlFor="firstName" className="block text-[14px] text-white opacity-80 mb-1">First Name</label>
-                      <input 
-                        id="firstName" 
-                        name="firstName" 
-                        value={form.firstName}
-                        ref={fieldRefs.firstName}
-                        required 
-                        className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.firstName && touched.firstName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        aria-invalid={errors.firstName && touched.firstName ? "true" : "false"}
-                        aria-describedby={errors.firstName && touched.firstName ? "firstName-error" : undefined}
-                      />
-                      {errors.firstName && touched.firstName && (
-                        <p id="firstName-error" className="text-red-400 text-[14px] mt-1">
-                          {errors.firstName}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <label htmlFor="lastName" className="block text-[14px] text-white opacity-80 mb-1">Last Name</label>
-                      <input 
-                        id="lastName"
-                        name="lastName" 
-                        value={form.lastName}
-                        ref={fieldRefs.lastName}
-                        required 
-                        className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.lastName && touched.lastName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        aria-invalid={errors.lastName && touched.lastName ? "true" : "false"}
-                        aria-describedby={errors.lastName && touched.lastName ? "lastName-error" : undefined}
-                      />
-                      {errors.lastName && touched.lastName && (
-                        <p id="lastName-error" className="text-red-400 text-[14px] mt-1">
-                          {errors.lastName}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Email Field */}
-                <div>
-                  <label htmlFor="email" className="block text-[18px] tracking-[0.5px] text-white mb-2">Email <span className="text-[13px] text-white opacity-65">(required)</span></label>
-                  <input 
-                    id="email" 
-                    name="email" 
-                    type="email" 
-                    value={form.email}
-                    ref={fieldRefs.email}
-                    required 
-                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.email && touched.email ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    aria-invalid={errors.email && touched.email ? "true" : "false"}
-                    aria-describedby={errors.email && touched.email ? "email-error" : undefined}
-                  />
-                  {errors.email && touched.email && (
-                    <p id="email-error" className="text-red-400 text-[14px] mt-1">
-                      {errors.email}
-                    </p>
-                  )}
-                </div>
-
-                {/* Subject Field */}
-                <div>
-                  <label htmlFor="subject" className="block text-[18px] tracking-[0.5px] text-white mb-2">Subject <span className="text-[13px] text-white opacity-65">(required)</span></label>
-                  <input 
-                    id="subject" 
-                    name="subject" 
-                    value={form.subject}
-                    ref={fieldRefs.subject}
-                    required 
-                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.subject && touched.subject ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    aria-invalid={errors.subject && touched.subject ? "true" : "false"}
-                    aria-describedby={errors.subject && touched.subject ? "subject-error" : undefined}
-                  />
-                  {errors.subject && touched.subject && (
-                    <p id="subject-error" className="text-red-400 text-[14px] mt-1">
-                      {errors.subject}
-                    </p>
-                  )}
-                </div>
-
-                {/* Message Field */}
-                <div>
-                  <label htmlFor="message" className="block text-[18px] tracking-[0.5px] text-white mb-2">Message <span className="text-[13px] text-white opacity-65">(required)</span></label>
-                  <textarea 
-                    id="message" 
-                    name="message" 
-                    value={form.message}
-                    ref={fieldRefs.message}
-                    required 
-                    style={{ minHeight: '120px' }}
-                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.message && touched.message ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white resize-y`}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    aria-invalid={errors.message && touched.message ? "true" : "false"}
-                    aria-describedby={errors.message && touched.message ? "message-error" : undefined}
-                  ></textarea>
-                  {errors.message && touched.message && (
-                    <p id="message-error" className="text-red-400 text-[14px] mt-1">
-                      {errors.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* Submit Button */}
-                <div className="mt-[30px]">
-                  <WhiteTextButton
-                    isSubmitting={isSubmitting}
-                    text={isSubmitting ? 'Sending...' : 'Send'}
-                  />
-                </div>
-              </form>
+              {renderFormContent()}
             </div>
           </div>
         </div>
@@ -369,3 +643,4 @@ export default function ContactPage() {
     </div>
   );
 }
+

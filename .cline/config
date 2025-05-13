@@ -3,7 +3,7 @@
     "name": "Thrive Digital"
   },
   "settings": {
-    "memory_bank_enabled": true,
+    "memory_bank_enabled": false,
     "includeOpenFiles": false,
     "enableCommandExecution": false
   },
