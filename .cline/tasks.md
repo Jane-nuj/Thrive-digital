@@ -55,7 +55,7 @@ Portfolio/freelancer site for Jane Fletcher with clean, minimal design featuring
 
 ## Accessibility
 - [ ] Add proper ARIA labels to navigation toggle
-- [ ] Ensure form error messages are accessible
+- [x] Ensure form error messages are accessible
 - [ ] Add skip navigation link for keyboard users
 - [ ] Improve focus visibility on form fields and buttons
 - [ ] Test with keyboard navigation and fix tab order issues
@@ -63,7 +63,7 @@ Portfolio/freelancer site for Jane Fletcher with clean, minimal design featuring
 - [ ] Ensure color contrast meets WCAG guidelines (especially gold text)
 - [ ] Test form validation for accessibility
 - [ ] Add aria-current for active navigation items
-- [ ] Implement proper form labels with accessible error messaging
+- [x] Implement proper form labels with accessible error messaging
 
 ## SEO & Performance
 - [x] Set basic meta title and description
@@ -81,11 +81,11 @@ Portfolio/freelancer site for Jane Fletcher with clean, minimal design featuring
 
 ## API Integration & Functionality
 - [ ] Complete email service integration with environment variables
-- [ ] Add form validation and error handling
+- [x] Add form validation and error handling
 - [ ] Implement clear success/error feedback on form submission
 - [ ] Add rate limiting to contact form to prevent abuse
 - [ ] Set up proper error logging for form submissions
-- [ ] Add client-side validation before form submission
+- [x] Add client-side validation before form submission
 - [ ] Consider adding a honeypot field to prevent spam
 
 ## Deployment (Vercel)

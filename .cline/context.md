@@ -4,6 +4,21 @@
 This is a portfolio/freelancer website for Jane Fletcher featuring a clean, minimal design with dark charcoal background and gold accents. The site uses Manrope for headings and Poppins for body text, and features a mobile-first responsive layout with a working contact form.
 
 ## Recent Updates (2025-05-13)
+### Contact Form Validation Implementation
+We've implemented comprehensive client-side validation for the contact form to improve user experience and ensure data quality:
+1. Added validation for all form fields with specific requirements:
+   - Name fields: Minimum 2 characters, no numbers or special characters
+   - Email: Valid email format validation
+   - Subject: 3-100 character length requirement
+   - Message: Minimum 10 characters
+2. Implemented validation on blur (when users leave a field)
+3. Added clear error messages with red borders for invalid fields
+4. Implemented focus management for errors (focusing the first invalid field)
+5. Added ARIA attributes for improved accessibility
+
+Documentation for this implementation can be found in:
+- `.cline/decisions/2025-05-13-contact-form-validation.md`
+
 ### Mobile Typography Consistency Fix
 We fixed an inconsistency in heading sizes between pages on mobile:
 1. The contact page h1 ("Let me know how I can help") was appearing larger than the homepage h1 ("Need a contractor who has") in mobile view
@@ -50,17 +65,17 @@ Documentation for these changes has been added to:
 - `.cline/decisions/2025-05-13-mobile-layout-improvements.md`
 
 ## Current Focus
-- Adding visual feedback for contact form submissions
-- Improving form validation and user experience
-- Enhancing interactive elements with better transitions
-- Completing accessibility improvements
+- Enhancing visual feedback for contact form submissions (success/error states)
+- Implementing "Send another message" option after successful submission
+- Adding CSS transitions for smoother user experience
+- Completing accessibility improvements for form feedback
 
 ## Next Steps
 - Fix LinkedIn icon size inconsistency between mobile and desktop
 - Improve hover transitions on navigation and buttons
 - Add subtle animations for page transitions
-- Implement proper form validation with clear error feedback
-- Add visual feedback for contact form submission
+- Complete email service integration for the contact form
+- Implement security features (honeypot, rate limiting)
 - Create 404 and 500 error pages
 - Add proper ARIA labels to improve accessibility
 

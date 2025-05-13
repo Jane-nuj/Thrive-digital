@@ -2,6 +2,15 @@
 
 import { useState, useEffect, useRef } from "react";
 
+// Validation helper types
+type ValidationErrors = {
+  [key: string]: string;
+};
+
+type TouchedFields = {
+  [key: string]: boolean;
+};
+
 // Custom button component that ensures white text
 const WhiteTextButton = ({ isSubmitting, text }: { isSubmitting: boolean, text: string }) => {
   return (
@@ -37,22 +46,138 @@ const WhiteTextButton = ({ isSubmitting, text }: { isSubmitting: boolean, text: 
   );
 };
 
+// Validation helper functions
+const validateName = (value: string): string => {
+  if (!value.trim()) return "Name is required";
+  if (value.trim().length < 2) return "Name must be at least 2 characters";
+  if (/[0-9!@#$%^&*(),.?":{}|<>]/.test(value)) return "Name cannot contain numbers or special characters";
+  return "";
+};
+
+const validateEmail = (value: string): string => {
+  if (!value.trim()) return "Email is required";
+  // Simple regex for email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(value)) return "Please enter a valid email address";
+  return "";
+};
+
+const validateSubject = (value: string): string => {
+  if (!value.trim()) return "Subject is required";
+  if (value.trim().length < 3) return "Subject must be at least 3 characters";
+  if (value.length > 100) return "Subject cannot exceed 100 characters";
+  return "";
+};
+
+const validateMessage = (value: string): string => {
+  if (!value.trim()) return "Message is required";
+  if (value.trim().length < 10) return "Message must be at least 10 characters";
+  return "";
+};
+
 export default function ContactPage() {
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", subject: "", message: "" });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const [touched, setTouched] = useState<TouchedFields>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     success: boolean;
     message: string;
   } | null>(null);
+  
+  // References to form fields for focus management
+  const fieldRefs = {
+    firstName: useRef<HTMLInputElement>(null),
+    lastName: useRef<HTMLInputElement>(null),
+    email: useRef<HTMLInputElement>(null),
+    subject: useRef<HTMLInputElement>(null),
+    message: useRef<HTMLTextAreaElement>(null)
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    
+    // If the field has been touched, validate on change as well
+    if (touched[name]) {
+      validateField(name, value);
+    }
+  };
+  
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setTouched({ ...touched, [name]: true });
+    validateField(name, value);
+  };
+  
+  const validateField = (name: string, value: string) => {
+    let error = "";
+    
+    switch (name) {
+      case 'firstName':
+      case 'lastName':
+        error = validateName(value);
+        break;
+      case 'email':
+        error = validateEmail(value);
+        break;
+      case 'subject':
+        error = validateSubject(value);
+        break;
+      case 'message':
+        error = validateMessage(value);
+        break;
+      default:
+        break;
+    }
+    
+    setErrors(prev => ({
+      ...prev,
+      [name]: error
+    }));
+    
+    return error === "";
+  };
+  
+  const validateForm = (): boolean => {
+    const fieldValidations = {
+      firstName: validateField('firstName', form.firstName),
+      lastName: validateField('lastName', form.lastName),
+      email: validateField('email', form.email),
+      subject: validateField('subject', form.subject),
+      message: validateField('message', form.message)
+    };
+    
+    // Mark all fields as touched
+    setTouched({
+      firstName: true,
+      lastName: true,
+      email: true,
+      subject: true,
+      message: true
+    });
+    
+    // Focus the first field with an error
+    const fieldsWithOrder = ['firstName', 'lastName', 'email', 'subject', 'message'];
+    for (const field of fieldsWithOrder) {
+      if (!fieldValidations[field as keyof typeof fieldValidations]) {
+        fieldRefs[field as keyof typeof fieldRefs].current?.focus();
+        return false;
+      }
+    }
+    
+    return Object.values(fieldValidations).every(isValid => isValid);
+  };
 
   // Handle form submission with API route
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Validate all fields before submission
+    if (!validateForm()) {
+      return; // Stop submission if validation fails
+    }
+    
     setIsSubmitting(true);
     setSubmitStatus(null);
     
@@ -124,10 +249,19 @@ export default function ContactPage() {
                         id="firstName" 
                         name="firstName" 
                         value={form.firstName}
+                        ref={fieldRefs.firstName}
                         required 
-                        className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] focus:outline-none focus:border-gold transition-colors font-sans text-white" 
-                        onChange={handleChange} 
+                        className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.firstName && touched.firstName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        aria-invalid={errors.firstName && touched.firstName ? "true" : "false"}
+                        aria-describedby={errors.firstName && touched.firstName ? "firstName-error" : undefined}
                       />
+                      {errors.firstName && touched.firstName && (
+                        <p id="firstName-error" className="text-red-400 text-[14px] mt-1">
+                          {errors.firstName}
+                        </p>
+                      )}
                     </div>
                     <div className="flex-1">
                       <label htmlFor="lastName" className="block text-[14px] text-white opacity-80 mb-1">Last Name</label>
@@ -135,10 +269,19 @@ export default function ContactPage() {
                         id="lastName"
                         name="lastName" 
                         value={form.lastName}
+                        ref={fieldRefs.lastName}
                         required 
-                        className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] focus:outline-none focus:border-gold transition-colors font-sans text-white" 
-                        onChange={handleChange} 
+                        className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.lastName && touched.lastName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        aria-invalid={errors.lastName && touched.lastName ? "true" : "false"}
+                        aria-describedby={errors.lastName && touched.lastName ? "lastName-error" : undefined}
                       />
+                      {errors.lastName && touched.lastName && (
+                        <p id="lastName-error" className="text-red-400 text-[14px] mt-1">
+                          {errors.lastName}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -151,10 +294,19 @@ export default function ContactPage() {
                     name="email" 
                     type="email" 
                     value={form.email}
+                    ref={fieldRefs.email}
                     required 
-                    className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] focus:outline-none focus:border-gold transition-colors font-sans text-white" 
-                    onChange={handleChange} 
+                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.email && touched.email ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    aria-invalid={errors.email && touched.email ? "true" : "false"}
+                    aria-describedby={errors.email && touched.email ? "email-error" : undefined}
                   />
+                  {errors.email && touched.email && (
+                    <p id="email-error" className="text-red-400 text-[14px] mt-1">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
 
                 {/* Subject Field */}
@@ -164,10 +316,19 @@ export default function ContactPage() {
                     id="subject" 
                     name="subject" 
                     value={form.subject}
+                    ref={fieldRefs.subject}
                     required 
-                    className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] focus:outline-none focus:border-gold transition-colors font-sans text-white" 
-                    onChange={handleChange} 
+                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.subject && touched.subject ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    aria-invalid={errors.subject && touched.subject ? "true" : "false"}
+                    aria-describedby={errors.subject && touched.subject ? "subject-error" : undefined}
                   />
+                  {errors.subject && touched.subject && (
+                    <p id="subject-error" className="text-red-400 text-[14px] mt-1">
+                      {errors.subject}
+                    </p>
+                  )}
                 </div>
 
                 {/* Message Field */}
@@ -177,11 +338,20 @@ export default function ContactPage() {
                     id="message" 
                     name="message" 
                     value={form.message}
+                    ref={fieldRefs.message}
                     required 
                     style={{ minHeight: '120px' }}
-                    className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] focus:outline-none focus:border-gold transition-colors font-sans text-white resize-y" 
+                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.message && touched.message ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white resize-y`}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    aria-invalid={errors.message && touched.message ? "true" : "false"}
+                    aria-describedby={errors.message && touched.message ? "message-error" : undefined}
                   ></textarea>
+                  {errors.message && touched.message && (
+                    <p id="message-error" className="text-red-400 text-[14px] mt-1">
+                      {errors.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Submit Button */}
