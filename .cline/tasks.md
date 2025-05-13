@@ -35,7 +35,12 @@ Portfolio/freelancer site for Jane Fletcher with clean, minimal design featuring
 - [x] Expand Areas of Expertise section with more details
 - [x] Implement "How I Work" section
 - [x] Add "Work Philosophy" section
-- [ ] Add visual feedback for contact form submission (success/error states)
+- [ ] Add visual feedback for contact form submission:
+  - [ ] Create success state with "Send another message" option
+  - [ ] Implement loading state with spinner
+  - [ ] Add error state with retry option
+  - [ ] Add smooth transitions between states
+  - [ ] Ensure all states are fully accessible
 
 
 ## Styling & Visual Refinements
