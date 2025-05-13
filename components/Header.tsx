@@ -13,58 +13,56 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-charcoal text-white py-6 pt-8 shadow-md">
-      <div className="container mx-auto max-w-7xl">
-        <div className="px-5 md:px-8">
-          <nav className="flex justify-between items-center">
-            {/* Logo */}
-            <div className="ml-1">
-              <Link href="/">
-                <Logo width={180} height={40} />
-              </Link>
-            </div>
+      <div className="layout-container">
+        <nav className="header-content flex justify-between items-center">
+          {/* Logo */}
+          <div className="logo-container">
+            <Link href="/">
+              <Logo width={180} height={40} />
+            </Link>
+          </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6">
-              <Link 
-                href="/contact" 
-                className={`${pathname === '/contact' ? 'border-b-2 border-gold' : 'hover:text-gold'} font-sans text-p1 flex items-center`}
-                style={pathname === '/contact' ? { color: '#ffffff' } : {}}  
-              >
-                Contact
-              </Link>
-              <Link 
-                href="https://linkedin.com" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="border border-white hover:border-gold hover:text-gold p-2 flex items-center justify-center transition-colors"
-                aria-label="LinkedIn profile"
-              >
-                <Image 
-                  src="/images/linkedinv2-fill.svg" 
-                  alt="LinkedIn" 
-                  width={20} 
-                  height={20} 
-                />
-              </Link>
-            </div>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-6">
+            <Link 
+              href="/contact" 
+              className={`${pathname === '/contact' ? 'border-b-2 border-gold' : 'hover:text-gold'} font-sans text-p1 flex items-center`}
+              style={pathname === '/contact' ? { color: '#ffffff' } : {}}  
+            >
+              Contact
+            </Link>
+            <Link 
+              href="https://linkedin.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="border border-white hover:border-gold hover:text-gold p-2 flex items-center justify-center transition-colors"
+              aria-label="LinkedIn profile"
+            >
+              <Image 
+                src="/images/linkedinv2-fill.svg" 
+                alt="LinkedIn" 
+                width={20} 
+                height={20} 
+              />
+            </Link>
+          </div>
 
-            {/* Mobile Navigation Toggle */}
-            <div className="md:hidden">
-              <button 
-                className="text-white hover:text-gold focus:outline-none transition-colors"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label="Toggle mobile menu"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-              </button>
-            </div>
-            
-            {/* Mobile Navigation Menu */}
-            <MobileNav isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-          </nav>
-        </div>
+          {/* Mobile Navigation Toggle */}
+          <div className="md:hidden">
+            <button 
+              className="text-white hover:text-gold focus:outline-none transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle mobile menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+              </svg>
+            </button>
+          </div>
+          
+          {/* Mobile Navigation Menu */}
+          <MobileNav isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+        </nav>
       </div>
     </header>
   );

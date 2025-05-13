@@ -15,7 +15,6 @@ export default function Logo({ className = '', width = 180, height = 40 }: LogoP
         width={width}
         height={40}
         className={`${className} block`}
-        style={{ width: 'auto', height: 'auto', margin: 0 }}
         priority
       />
     </div>

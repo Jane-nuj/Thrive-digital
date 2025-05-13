@@ -6,32 +6,21 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Increase left margin on main content containers to match Squarespace design */
-.main-content, .content-wrapper, main, .container, section > div {
-  padding-left: 15% !important;
-}
-
-/* Ensure logo has consistent alignment with content */
-.logo, header img, .site-logo {
-  margin-left: 15% !important;
-}
-
-/* Remove any competing left padding on child elements */
-.hero-section, .intro-section, .expertise-section, section, .content-block {
-  padding-left: 0 !important;
-}
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .main-content, .content-wrapper, main, .container, section > div, .logo, header img, .site-logo {
-    padding-left: 12% !important;
-    margin-left: 12% !important;
+@layer components {
+  /* Add consistent layout container class */
+  .layout-container {
+    @apply w-full max-w-7xl mx-auto px-5 md:px-8;
   }
-}
-
-@media (max-width: 768px) {
-  .main-content, .content-wrapper, main, .container, section > div, .logo, header img, .site-logo {
-    padding-left: 8% !important;
-    margin-left: 8% !important;
+  
+  /* Apply consistent left spacing with larger margin */
+  .header-content, .logo-container, .main-content {
+    @apply pl-[22%] md:pl-[22%] sm:pl-[12%];
+  }
+  
+  /* Override padding on mobile */
+  @media (max-width: 768px) {
+    .header-content, .logo-container, .main-content {
+      @apply pl-[12%];
+    }
   }
 }

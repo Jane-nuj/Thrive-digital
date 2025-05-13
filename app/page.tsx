@@ -1,8 +1,8 @@
 export default function HomePage() {
   return (
     <div className="py-12 md:py-20">
-      <div className="container mx-auto max-w-7xl">
-        <div className="px-5 md:px-8">
+      <div className="layout-container">
+        <div className="main-content">
 
           {/* Hero Section */}
           <section className="mb-16 md:mb-24 max-w-3xl">

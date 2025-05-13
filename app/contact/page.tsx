@@ -93,8 +93,8 @@ export default function ContactPage() {
 
   return (
     <div className="bg-charcoal text-white py-12 md:py-20">
-      <div className="container mx-auto max-w-7xl">
-        <div className="px-5 md:px-8">
+      <div className="layout-container">
+        <div className="main-content">
           {/* Form status message */}
           {submitStatus.message && (
             <div className={`mb-8 p-4 rounded ${submitStatus.success ? 'bg-green-900 text-white' : 'bg-red-900 text-white'}`}>
