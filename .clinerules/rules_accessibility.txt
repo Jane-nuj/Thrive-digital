@@ -1,0 +1,40 @@
+@ruleset accessibility
+
+## Semantic HTML
+- Use proper semantic elements (nav, main, article, section)
+- Use headings in proper hierarchical order (h1, h2, h3)
+- Implement lists (ul, ol) for related items
+
+## ARIA Attributes
+- Add aria-label to elements without visible text
+- Use aria-expanded for expandable components
+- Implement aria-current for navigation items
+- Use aria-hidden for decorative elements
+- Add aria-controls and aria-haspopup for interactive elements
+
+## Keyboard Navigation
+- Ensure all interactive elements are focusable
+- Add visible focus indicators for all interactive elements
+- Implement logical tab order
+- Add skip-to-content link at the beginning of pages
+- Trap focus in modals and dialogs
+
+## Colors and Contrast
+- Maintain 4.5:1 contrast ratio for normal text
+- Ensure 3:1 contrast ratio for large text
+- Don't rely on color alone to convey information
+- Test contrast of gold accent (#a17e29) against backgrounds
+
+## Forms
+- Link labels to form controls with htmlFor/id
+- Add descriptive error messages
+- Make error states perceivable to screen readers
+- Provide success feedback for form submissions
+- Enable form submission via keyboard
+
+## Images and Media
+- Add alt text to all images (descriptive for content, empty for decorative)
+- Ensure SVGs have proper accessibility attributes
+- Provide transcripts or captions for audio/video content
+
+@end

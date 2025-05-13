@@ -7,12 +7,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'yellow-600': '#b89739', // Updated to a brighter gold
+        'yellow-600': '#b77f0f', // Updated to new gold color
         'off-white': '#f2f2f2',
         'charcoal': '#2a2a2a',
         'black': '#000000', // Already default, but good to be explicit
         'white': '#ffffff', // Already default, but good to be explicit
-        'gold': '#b89739', // Updated to a brighter gold for easier use
+        'gold': '#b77f0f', // Updated to new gold color for easier use
       },
       fontFamily: {
         // Use CSS variables defined in layout.tsx

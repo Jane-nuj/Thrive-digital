@@ -1,0 +1,40 @@
+@ruleset development
+
+## Project Structure
+- Maintain app router structure with route-based organization
+- Keep component logic in separate files from route handlers
+- Place reusable components in /components directory
+- Store utility functions in /lib directory
+
+## TypeScript Standards
+- Use TypeScript for all components and functions
+- Define prop interfaces for all components
+- Use meaningful type names that describe purpose
+- Avoid using 'any' type
+
+## Component Standards
+- Use functional components with hooks
+- Keep components focused on a single responsibility
+- Avoid prop drilling - use context for deeply shared state
+- Extract repeated logic into custom hooks
+- Use Next.js Link component for internal navigation
+
+## State Management
+- Use React hooks for component state (useState, useReducer)
+- Implement form state with controlled components
+- Use context only when state needs to be shared widely
+
+## Performance
+- Optimize images with next/image
+- Implement proper lazy loading for below-fold content
+- Minimize dependencies and bundle size
+- Use server components where appropriate
+
+## Coding Style
+- Use consistent indentation (2 spaces)
+- Follow camelCase for variables/functions, PascalCase for components
+- Keep functions small and focused
+- Use descriptive variable and function names
+- Add comments for complex logic
+
+@end

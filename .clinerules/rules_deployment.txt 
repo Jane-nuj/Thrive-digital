@@ -1,0 +1,53 @@
+@ruleset deployment
+
+## Vercel Deployment Standards
+- Use automatic deployments from main branch for production
+- Set up preview deployments for pull requests to test changes before merging
+- Configure proper build settings in vercel.json if needed
+- Follow branch-based workflow: feature branches → main → production
+
+## Environment Variables
+- Store all sensitive information as environment variables
+- Required variables:
+  - RESEND_API_KEY: For email functionality in contact form
+  - NEXT_PUBLIC_SITE_URL: Base URL for canonical links
+- Never hard-code sensitive information in application code
+- Create separate environment sets for development and production
+
+## Domain Configuration
+- Set up custom domain in Vercel dashboard
+- Configure HTTPS with automatic SSL certificate
+- Set up proper redirects from www to non-www (or vice versa)
+- Ensure proper DNS configuration with recommended TTL values
+
+## Monitoring & Error Handling
+- Enable Vercel Analytics for performance monitoring
+- Create custom 404.tsx page in app directory matching site design
+- Create error.tsx for handling 500 errors with fallback UI
+- Set up error logging with Vercel integration or external service
+- Monitor core web vitals through Vercel dashboard
+
+## CI/CD Pipeline
+- Automate testing before deployment where possible
+- Use GitHub actions for additional pre-deployment checks if needed
+- Follow atomic deployments - all or nothing approach
+- Verify successful deployments with automated checks
+
+## Performance Optimization
+- Enable caching for static assets through Vercel configuration
+- Implement proper cache-control headers
+- Configure image optimization options
+- Use Vercel Edge Network for global CDN distribution
+
+## Rollback Strategy
+- Test rollback procedure for critical changes
+- Document deployment versions and changes
+- Maintain ability to quickly revert to previous working version
+
+## Security
+- Configure Content Security Policy (CSP) headers
+- Implement rate limiting for API routes, especially contact form
+- Scan dependencies regularly for vulnerabilities
+- Set up proper CORS policy for API endpoints
+
+@end
