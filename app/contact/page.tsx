@@ -5,6 +5,8 @@ import { useState, useEffect, useRef } from "react";
 import SuccessMessage from "../../components/contact/SuccessMessage";
 import ErrorMessage from "../../components/contact/ErrorMessage";
 import SubmitButton from "../../components/contact/SubmitButton";
+import AnimatedFormContainer from "../../components/contact/AnimatedFormContainer";
+import FormField from "../../components/contact/FormField";
 
 // Form state type
 type FormState = 'idle' | 'validating' | 'submitting' | 'success' | 'error';
@@ -281,14 +283,18 @@ export default function ContactPage() {
   const renderFormContent = () => {
     switch (formState) {
       case 'success':
-        return <SuccessMessage 
-                 firstName={form.firstName} 
-                 onReset={resetForm} 
-               />;
+        return (
+          <AnimatedFormContainer formState={formState}>
+            <SuccessMessage 
+              firstName={form.firstName} 
+              onReset={resetForm} 
+            />
+          </AnimatedFormContainer>
+        );
       
       case 'error':
         return (
-          <div>
+          <AnimatedFormContainer formState={formState}>
             <ErrorMessage 
               errorType={errorType}
               message={errorMessage} 
@@ -296,7 +302,7 @@ export default function ContactPage() {
             />
             
             <form onSubmit={handleSubmit} className="space-y-[30px] max-w-[800px] mt-6">
-              {/* Name Fields */}
+                {/* Name Fields */}
               <div>
                 <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
                 <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
@@ -420,79 +426,100 @@ export default function ContactPage() {
               />
             </div>
             </form>
-          </div>
+          </AnimatedFormContainer>
         );
       
       case 'submitting':
         // Show form with disabled fields during submission
         return (
-          <div className="relative">
-            <form className="space-y-[30px] max-w-[800px] opacity-75">
+          <AnimatedFormContainer formState={formState} className="relative">
+            <form className="space-y-[30px] max-w-[800px] form-submitting">
               {/* Form fields with the same structure but all disabled */}
               {/* Name Fields */}
               <div>
                 <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
                 <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
                   <div className="flex-1">
-                    <label htmlFor="firstName" className="block text-[14px] text-white opacity-80 mb-1">First Name</label>
-                    <input 
-                      disabled
-                      id="firstName" 
-                      name="firstName" 
+                    <FormField
+                      id="firstName"
+                      name="firstName"
+                      label="First Name"
                       value={form.firstName}
-                      className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] font-sans text-white cursor-not-allowed"
+                      onChange={() => {}}
+                      onBlur={() => {}}
+                      error=""
+                      touched={false}
+                      required={true}
+                      labelClassName="text-[14px] text-white opacity-80"
+                      className="cursor-not-allowed"
+                      disabled
                     />
                   </div>
                   <div className="flex-1">
-                    <label htmlFor="lastName" className="block text-[14px] text-white opacity-80 mb-1">Last Name</label>
-                    <input 
-                      disabled
+                    <FormField
                       id="lastName"
-                      name="lastName" 
+                      name="lastName"
+                      label="Last Name"
                       value={form.lastName}
-                      className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] font-sans text-white cursor-not-allowed"
+                      onChange={() => {}}
+                      onBlur={() => {}}
+                      error=""
+                      touched={false}
+                      required={true}
+                      labelClassName="text-[14px] text-white opacity-80"
+                      className="cursor-not-allowed"
+                      disabled
                     />
                   </div>
                 </div>
               </div>
 
               {/* Email Field */}
-              <div>
-                <label htmlFor="email" className="block text-[18px] tracking-[0.5px] text-white mb-2">Email <span className="text-[13px] text-white opacity-65">(required)</span></label>
-                <input 
-                  disabled
-                  id="email" 
-                  name="email" 
-                  type="email" 
-                  value={form.email}
-                  className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] font-sans text-white cursor-not-allowed"
-                />
-              </div>
+              <FormField
+                id="email"
+                name="email"
+                label="Email"
+                type="email"
+                value={form.email}
+                onChange={() => {}}
+                onBlur={() => {}}
+                error=""
+                touched={false}
+                required={true}
+                className="cursor-not-allowed"
+                disabled
+              />
 
               {/* Subject Field */}
-              <div>
-                <label htmlFor="subject" className="block text-[18px] tracking-[0.5px] text-white mb-2">Subject <span className="text-[13px] text-white opacity-65">(required)</span></label>
-                <input 
-                  disabled
-                  id="subject" 
-                  name="subject" 
-                  value={form.subject}
-                  className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] font-sans text-white cursor-not-allowed"
-                />
-              </div>
+              <FormField
+                id="subject"
+                name="subject"
+                label="Subject"
+                value={form.subject}
+                onChange={() => {}}
+                onBlur={() => {}}
+                error=""
+                touched={false}
+                required={true}
+                className="cursor-not-allowed"
+                disabled
+              />
 
               {/* Message Field */}
-              <div>
-                <label htmlFor="message" className="block text-[18px] tracking-[0.5px] text-white mb-2">Message <span className="text-[13px] text-white opacity-65">(required)</span></label>
-                <textarea 
-                  disabled
-                  id="message" 
-                  name="message" 
-                  value={form.message}
-                  style={{ minHeight: '120px' }}
-                  className="w-full py-[8px] px-0 bg-transparent border-b border-[rgba(255,255,255,0.3)] font-sans text-white resize-none cursor-not-allowed"
-                ></textarea>
-              </div>
+              <FormField
+                id="message"
+                name="message"
+                label="Message"
+                type="textarea"
+                value={form.message}
+                onChange={() => {}}
+                onBlur={() => {}}
+                error=""
+                touched={false}
+                required={true}
+                className="cursor-not-allowed resize-none"
+                disabled
+              />
 
               {/* Submit Button */}
               <div className="mt-[30px]">
@@ -504,126 +531,93 @@ export default function ContactPage() {
             <div className="sr-only" aria-live="polite">
               Sending your message, please wait...
             </div>
-          </div>
+          </AnimatedFormContainer>
         );
       
       default: // 'idle' or 'validating'
         return (
-          <form onSubmit={handleSubmit} className="space-y-[30px] max-w-[800px]" aria-busy={formState === 'validating'}>
+          <AnimatedFormContainer formState={formState}>
+            <form onSubmit={handleSubmit} className="space-y-[30px] max-w-[800px]" aria-busy={formState === 'validating'}>
             {/* Name Fields */}
             <div>
               <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
               <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
                 <div className="flex-1">
-                  <label htmlFor="firstName" className="block text-[14px] text-white opacity-80 mb-1">First Name</label>
-                  <input 
-                    id="firstName" 
-                    name="firstName" 
+                  <FormField
+                    id="firstName"
+                    name="firstName"
+                    label="First Name"
                     value={form.firstName}
-                    ref={fieldRefs.firstName}
-                    required 
-                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.firstName && touched.firstName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    aria-invalid={errors.firstName && touched.firstName ? "true" : "false"}
-                    aria-describedby={errors.firstName && touched.firstName ? "firstName-error" : undefined}
+                    error={errors.firstName}
+                    touched={touched.firstName}
+                    required={true}
+                    labelClassName="text-[14px] text-white opacity-80"
+                    ref={fieldRefs.firstName}
                   />
-                  {errors.firstName && touched.firstName && (
-                    <p id="firstName-error" className="text-red-400 text-[14px] mt-1">
-                      {errors.firstName}
-                    </p>
-                  )}
                 </div>
                 <div className="flex-1">
-                  <label htmlFor="lastName" className="block text-[14px] text-white opacity-80 mb-1">Last Name</label>
-                  <input 
+                  <FormField
                     id="lastName"
-                    name="lastName" 
+                    name="lastName"
+                    label="Last Name"
                     value={form.lastName}
-                    ref={fieldRefs.lastName}
-                    required 
-                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.lastName && touched.lastName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    aria-invalid={errors.lastName && touched.lastName ? "true" : "false"}
-                    aria-describedby={errors.lastName && touched.lastName ? "lastName-error" : undefined}
+                    error={errors.lastName}
+                    touched={touched.lastName}
+                    required={true}
+                    labelClassName="text-[14px] text-white opacity-80"
+                    ref={fieldRefs.lastName}
                   />
-                  {errors.lastName && touched.lastName && (
-                    <p id="lastName-error" className="text-red-400 text-[14px] mt-1">
-                      {errors.lastName}
-                    </p>
-                  )}
                 </div>
               </div>
             </div>
 
             {/* Email Field */}
-            <div>
-              <label htmlFor="email" className="block text-[18px] tracking-[0.5px] text-white mb-2">Email <span className="text-[13px] text-white opacity-65">(required)</span></label>
-              <input 
-                id="email" 
-                name="email" 
-                type="email" 
-                value={form.email}
-                ref={fieldRefs.email}
-                required 
-                className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.email && touched.email ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                aria-invalid={errors.email && touched.email ? "true" : "false"}
-                aria-describedby={errors.email && touched.email ? "email-error" : undefined}
-              />
-              {errors.email && touched.email && (
-                <p id="email-error" className="text-red-400 text-[14px] mt-1">
-                  {errors.email}
-                </p>
-              )}
-            </div>
+            <FormField
+              id="email"
+              name="email"
+              label="Email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={errors.email}
+              touched={touched.email}
+              required={true}
+              ref={fieldRefs.email}
+            />
 
             {/* Subject Field */}
-            <div>
-              <label htmlFor="subject" className="block text-[18px] tracking-[0.5px] text-white mb-2">Subject <span className="text-[13px] text-white opacity-65">(required)</span></label>
-              <input 
-                id="subject" 
-                name="subject" 
-                value={form.subject}
-                ref={fieldRefs.subject}
-                required 
-                className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.subject && touched.subject ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                aria-invalid={errors.subject && touched.subject ? "true" : "false"}
-                aria-describedby={errors.subject && touched.subject ? "subject-error" : undefined}
-              />
-              {errors.subject && touched.subject && (
-                <p id="subject-error" className="text-red-400 text-[14px] mt-1">
-                  {errors.subject}
-                </p>
-              )}
-            </div>
+            <FormField
+              id="subject"
+              name="subject"
+              label="Subject"
+              value={form.subject}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={errors.subject}
+              touched={touched.subject}
+              required={true}
+              ref={fieldRefs.subject}
+            />
 
             {/* Message Field */}
-            <div>
-              <label htmlFor="message" className="block text-[18px] tracking-[0.5px] text-white mb-2">Message <span className="text-[13px] text-white opacity-65">(required)</span></label>
-              <textarea 
-                id="message" 
-                name="message" 
-                value={form.message}
-                ref={fieldRefs.message}
-                required 
-                style={{ minHeight: '120px' }}
-                className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.message && touched.message ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white resize-y`}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                aria-invalid={errors.message && touched.message ? "true" : "false"}
-                aria-describedby={errors.message && touched.message ? "message-error" : undefined}
-              ></textarea>
-              {errors.message && touched.message && (
-                <p id="message-error" className="text-red-400 text-[14px] mt-1">
-                  {errors.message}
-                </p>
-              )}
-            </div>
+            <FormField
+              id="message"
+              name="message"
+              label="Message"
+              type="textarea"
+              value={form.message}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={errors.message}
+              touched={touched.message}
+              required={true}
+              ref={fieldRefs.message}
+            />
 
             {/* Submit Button */}
             <div className="mt-[30px]">
@@ -672,6 +666,7 @@ export default function ContactPage() {
               </div>
             )}
           </form>
+          </AnimatedFormContainer>
         );
     }
   };

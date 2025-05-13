@@ -27,6 +27,45 @@ body {
   will-change: transform, opacity;
 }
 
+/* Form field focus animation */
+.field-focus {
+  animation: fieldFocus 0.3s ease-out forwards;
+  will-change: transform, box-shadow;
+}
+
+/* Form field blur animation */
+.field-blur {
+  animation: fieldBlur 0.3s ease-out forwards;
+  will-change: transform, box-shadow;
+}
+
+/* Error message animation */
+.error-fade-in {
+  animation: errorFadeIn 0.3s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+/* Form state animations */
+.form-validating {
+  animation: formValidating 0.25s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+.form-submitting {
+  animation: formSubmitting 0.3s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+.form-success {
+  animation: formSuccess 0.4s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+.form-error {
+  animation: formError 0.4s ease-out forwards;
+  will-change: transform, opacity, background-color;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -47,18 +86,106 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
+@keyframes errorFadeIn {
+  0% { opacity: 0; transform: translateY(-5px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fieldFocus {
+  0% { transform: translateY(0); box-shadow: none; }
+  100% { transform: translateY(-2px); box-shadow: 0 2px 4px rgba(183, 127, 15, 0.25); }
+}
+
+@keyframes fieldBlur {
+  0% { transform: translateY(-2px); box-shadow: 0 2px 4px rgba(183, 127, 15, 0.25); }
+  100% { transform: translateY(0); box-shadow: none; }
+}
+
+@keyframes formValidating {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.995); opacity: 0.9; }
+}
+
+@keyframes formSubmitting {
+  0% { transform: scale(0.995); opacity: 0.9; }
+  100% { transform: scale(0.99); opacity: 0.75; }
+}
+
+@keyframes formSuccess {
+  0% { transform: scale(0.99); opacity: 0.75; }
+  50% { transform: scale(1.005); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes formError {
+  0% { transform: scale(0.99); opacity: 0.75; }
+  25% { transform: scale(1.01); }
+  50% { transform: scale(0.99); }
+  75% { transform: scale(1.005); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Reduced motion alternative keyframes */
+@keyframes errorFadeInReduced {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fieldFocusReduced {
+  0% { opacity: 0.9; }
+  100% { opacity: 1; }
+}
+
+@keyframes fieldBlurReduced {
+  0% { opacity: 1; }
+  100% { opacity: 0.9; }
+}
+
+@keyframes formStateReduced {
+  0% { opacity: 0.9; }
+  100% { opacity: 1; }
+}
+
 /* Reduced motion preferences */
 @media (prefers-reduced-motion) {
   .fade-in,
   .fade-out,
   .slide-up,
-  .slide-down {
+  .slide-down,
+  .field-focus,
+  .field-blur,
+  .error-fade-in,
+  .form-validating,
+  .form-submitting,
+  .form-success,
+  .form-error {
     animation-duration: 0.1s;
+    transition-duration: 0.1s;
   }
   
   /* Disable the spinner animation for reduced motion */
   .animate-spin {
     animation: none;
+  }
+  
+  /* Use simplified animations for reduced motion */
+  .error-fade-in {
+    animation-name: errorFadeInReduced;
+  }
+  
+  .field-focus {
+    animation-name: fieldFocusReduced;
+  }
+  
+  .field-blur {
+    animation-name: fieldBlurReduced;
+  }
+  
+  .form-validating,
+  .form-submitting,
+  .form-success,
+  .form-error {
+    animation-name: formStateReduced;
   }
 }
 

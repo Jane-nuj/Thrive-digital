@@ -40,8 +40,9 @@ export const SuccessMessage = ({ firstName, onReset }: SuccessMessageProps) => {
       role="status"
       aria-live="polite"
     >
-      <div className={`success-icon mb-6 ${showIcon ? getAnimationClasses('slide-up', 'opacity-100') : 'opacity-0'} transition-opacity duration-300`}>
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Centered checkmark icon */}
+      <div className={`success-icon flex justify-center mb-8 ${showIcon ? getAnimationClasses('slide-up', 'opacity-100') : 'opacity-0'} transition-opacity duration-300`}>
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="10" stroke="#b77f0f" strokeWidth="2"/>
           <path d="M8 12L11 15L16 9" stroke="#b77f0f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
