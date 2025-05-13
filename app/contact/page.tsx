@@ -46,15 +46,15 @@ export default function ContactPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
-    success?: boolean;
-    message?: string;
-  }>({});
+    success: boolean;
+    message: string;
+  } | null>(null);
 
   // Handle form submission with API route
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus({});
+    setSubmitStatus(null);
     
     try {
       const response = await fetch('/api/contact', {
@@ -92,11 +92,11 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="bg-charcoal text-white py-12 md:py-20">
+    <div className="bg-charcoal text-white py-12 pt-16 md:py-20 md:pt-24">
       <div className="layout-container">
-        <div className="main-content">
+        <div className="content-padding">
           {/* Form status message */}
-          {submitStatus.message && (
+          {submitStatus && (
             <div className={`mb-8 p-4 rounded ${submitStatus.success ? 'bg-green-900 text-white' : 'bg-red-900 text-white'}`}>
               {submitStatus.message}
             </div>
