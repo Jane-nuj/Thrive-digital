@@ -83,7 +83,7 @@ export default function HomePage() {
 
           {/* CTA Section */}
           <section className="mb-24">
-            <h2 className="font-heading text-2xl mb-6">Want to build something that works?</h2>
+            <h2 className="font-heading text-2xl mb-12">Want to build something that works?</h2>
             <div>
               <a href="/contact" className="inline-block bg-gold hover:bg-yellow-500 text-white font-sans text-btn px-6 py-3 transition-colors font-medium">
                 Get in touch
