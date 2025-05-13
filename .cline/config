@@ -4,7 +4,8 @@
   },
   "settings": {
     "memory_bank_enabled": true,
-    "includeOpenFiles": false
+    "includeOpenFiles": false,
+    "enableCommandExecution": false
   },
   "rules": ["rules_thrive.txt"],
   "memory": [],

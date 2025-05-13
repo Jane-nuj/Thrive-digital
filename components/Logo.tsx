@@ -8,14 +8,16 @@ interface LogoProps {
 
 export default function Logo({ className = '', width = 180, height = 40 }: LogoProps) {
   return (
-    <Image 
-      src="/images/thriveHeader logo.png"
-      alt="Thrive Digital Logo"
-      width={width}
-      height={40}
-      className={className}
-      style={{ width: 'auto', height: 'auto' }}
-      priority
-    />
+    <div>
+      <Image 
+        src="/images/thriveHeader logo.png"
+        alt="Thrive Digital Logo"
+        width={width}
+        height={40}
+        className={`${className} block`}
+        style={{ width: 'auto', height: 'auto', margin: 0 }}
+        priority
+      />
+    </div>
   );
 }
