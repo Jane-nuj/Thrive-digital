@@ -6,21 +6,36 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-@layer components {
-  /* Add consistent layout container class */
+/* Container for page width */
+.layout-container {
+  width: 100%;
+  max-width: 72rem; /* 6xl in Tailwind */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem; /* px-5 in Tailwind */
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 768px) {
   .layout-container {
-    @apply w-full max-w-7xl mx-auto px-5 md:px-8;
+    padding-left: 2rem; /* md:px-8 in Tailwind */
+    padding-right: 2rem;
   }
-  
-  /* Apply consistent left spacing with larger margin */
-  .header-content, .logo-container, .main-content {
-    @apply pl-[22%] md:pl-[22%] sm:pl-[12%];
+}
+
+/* Consistent left padding for all main content */
+.content-padding {
+  padding-left: 10%;
+}
+
+@media (min-width: 768px) {
+  .content-padding {
+    padding-left: 10%;
   }
-  
-  /* Override padding on mobile */
-  @media (max-width: 768px) {
-    .header-content, .logo-container, .main-content {
-      @apply pl-[12%];
-    }
+}
+
+@media (max-width: 640px) {
+  .content-padding {
+    padding-left: 5%;
   }
 }

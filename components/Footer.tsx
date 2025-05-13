@@ -9,8 +9,8 @@ export default function Footer() {
   
   return (
     <footer className="bg-white text-black px-6 py-12 mt-16">
-      <div className="container mx-auto pl-6">
-        <p className="font-sans text-p1">
+      <div className="layout-container">
+        <p className="content-padding font-sans text-p1">
           {!isContactPage ? (
             <>
               If you think I'd be a good fit for your team,{' '}
