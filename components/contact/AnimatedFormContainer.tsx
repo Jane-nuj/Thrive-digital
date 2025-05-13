@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { useAnimationClasses, useTransitionStyle } from '../../lib/motion-preferences';
+import React, { ReactNode, useEffect } from 'react';
+import { useAnimationClasses, useTransitionStyle, useMotionPreference } from '../../lib/motion-preferences';
 
 type FormState = 'idle' | 'validating' | 'submitting' | 'success' | 'error';
 
@@ -7,12 +7,14 @@ interface AnimatedFormContainerProps {
   children: ReactNode;
   formState: FormState;
   className?: string;
+  ariaLabelledBy?: string;
 }
 
 const AnimatedFormContainer: React.FC<AnimatedFormContainerProps> = ({
   children,
   formState,
-  className = ''
+  className = '',
+  ariaLabelledBy
 }) => {
   // Get appropriate transition style based on motion preferences
   const transitionStyle = useTransitionStyle('all', 300, 'ease-out');
@@ -37,12 +39,63 @@ const AnimatedFormContainer: React.FC<AnimatedFormContainerProps> = ({
     }
   };
 
+  // Get reduced motion preference
+  const reducedMotion = useMotionPreference();
+  
+  // Announce state changes to screen readers
+  useEffect(() => {
+    // Only announce significant state changes
+    if (formState === 'submitting' || formState === 'success' || formState === 'error') {
+      const announceStateChange = () => {
+        const messages = {
+          submitting: 'Submitting form, please wait.',
+          success: 'Your message was successfully sent.',
+          error: 'There was a problem with your form submission.'
+        };
+        
+        // Create announcement element
+        const liveRegion = document.createElement('div');
+        liveRegion.setAttribute('aria-live', formState === 'error' ? 'assertive' : 'polite');
+        liveRegion.setAttribute('class', 'sr-only');
+        document.body.appendChild(liveRegion);
+        
+        // Add slight delay to ensure it's announced properly
+        setTimeout(() => {
+          liveRegion.textContent = messages[formState as keyof typeof messages];
+          
+          // Clean up after announcement
+          setTimeout(() => {
+            document.body.removeChild(liveRegion);
+          }, 3000);
+        }, reducedMotion ? 0 : 200);
+      };
+      
+      announceStateChange();
+    }
+  }, [formState, reducedMotion]);
+
   return (
     <div 
       className={`relative ${getStateClasses()} ${className}`}
       style={{ transition: transitionStyle }}
       aria-busy={formState === 'submitting' || formState === 'validating'}
+      role={
+        formState === 'idle' ? 'form' : 
+        formState === 'validating' ? 'form' :
+        formState === 'submitting' ? 'form' :
+        formState === 'success' ? 'region' :
+        formState === 'error' ? 'region' : undefined
+      }
+      aria-labelledby={ariaLabelledBy}
+      aria-atomic={formState === 'success' || formState === 'error' ? 'true' : undefined}
     >
+      {/* Status announcements for screen readers */}
+      {formState === 'validating' && (
+        <div className="sr-only" aria-live="polite">
+          Validating form fields, please wait.
+        </div>
+      )}
+      
       {children}
     </div>
   );

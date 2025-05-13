@@ -5,6 +5,7 @@ interface ErrorMessageProps {
   errorType?: 'validation' | 'server' | 'network' | 'general';
   message: string;
   onRetry: () => void;
+  ariaLabelledBy?: string; // For custom labeling relationships
 }
 
 export const ErrorMessage = ({ 
@@ -53,8 +54,13 @@ export const ErrorMessage = ({
         ${isVisible ? getAnimationClasses('slide-down', 'opacity-100') : 'opacity-0 translate-y-[-10px]'}
         transition-all duration-300
       `}
-      role="alert"
+      role="alertdialog"
+      aria-labelledby="error-heading"
+      aria-describedby="error-message"
       aria-live="assertive"
+      aria-atomic="true"
+      aria-relevant="additions text"
+      aria-modal="true"
     >
       <div className="flex items-start">
         <div className={`
@@ -72,8 +78,10 @@ export const ErrorMessage = ({
           ${isVisible ? getAnimationClasses('fade-in', 'opacity-100') : 'opacity-0'}
           transition-opacity duration-300 delay-150
         `}>
-          <h3 className="text-sm font-medium text-red-400">{getErrorHeading()}</h3>
-          <p className="text-sm text-red-300 mt-1">
+          <h3 id="error-heading" className="text-sm font-medium text-red-400">
+            <span className="sr-only">Error: </span>{getErrorHeading()}
+          </h3>
+          <p id="error-message" className="text-sm text-red-300 mt-1">
             {message || getDefaultMessage()}
           </p>
           <div className={`
@@ -85,9 +93,19 @@ export const ErrorMessage = ({
               onClick={onRetry} 
               className="bg-red-900/40 px-4 py-1.5 rounded text-sm text-red-100 hover:bg-red-900/60 transition-colors"
               autoFocus
+              aria-keyshortcuts="Alt+R"
+              onKeyDown={(e) => {
+                if (e.altKey && e.key === 'r') {
+                  onRetry();
+                }
+              }}
             >
               Try Again
             </button>
+            {/* Keyboard shortcut documentation for screen readers */}
+            <div className="sr-only">
+              Press Alt+R to retry sending your message.
+            </div>
           </div>
         </div>
       </div>

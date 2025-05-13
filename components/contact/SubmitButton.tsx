@@ -4,11 +4,13 @@ import { getAnimationClasses, getTransitionStyle, prefersReducedMotion } from '.
 interface SubmitButtonProps {
   isSubmitting: boolean;
   disabled?: boolean;
+  ariaLabel?: string;
 }
 
 export const SubmitButton = ({ 
   isSubmitting, 
-  disabled = false 
+  disabled = false,
+  ariaLabel
 }: SubmitButtonProps) => {
   // State for button animation
   const [animationState, setAnimationState] = useState({
@@ -56,11 +58,24 @@ export const SubmitButton = ({
         ${isSubmitting || disabled ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#b77f0f]/90'} 
         ${hoverOrGlowClass}
         relative
+        focus:outline-none focus:ring-2 focus:ring-[#b77f0f] focus:ring-offset-2 focus:ring-offset-charcoal
       `}
       style={{ transition: buttonTransition, ...animationState.glow && { boxShadow: '0 0 8px rgba(183, 127, 15, 0.5)' } }}
       aria-busy={isSubmitting}
+      aria-live={isSubmitting ? "assertive" : "off"}
+      aria-label={ariaLabel || (isSubmitting ? "Sending message, please wait" : "Send message")}
+      aria-disabled={isSubmitting || disabled ? true : undefined}
       onMouseEnter={() => setAnimationState(prev => ({ ...prev, hover: true }))}
       onMouseLeave={() => setAnimationState(prev => ({ ...prev, hover: false }))}
+      onKeyDown={(e) => {
+        // Add support for keyboard navigation
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (!isSubmitting && !disabled) {
+            e.currentTarget.click();
+          }
+        }
+      }}
     >
       <span 
         className={`
@@ -78,14 +93,30 @@ export const SubmitButton = ({
             absolute inset-0 flex items-center justify-center
             ${getAnimationClasses('fade-in', 'opacity-100')}
           `}
+          aria-hidden="true"
         >
-          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg 
+            className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            role="img"
+          >
+            <title>Loading indicator</title>
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
           Sending...
         </span>
       )}
+      
+      {/* Screen reader only text for better status announcements */}
+      <span className="sr-only">
+        {isSubmitting ? "Sending your message, please wait." : 
+          disabled ? "Submit button is currently disabled." : 
+          "Click to submit your contact form."}
+      </span>
     </button>
   );
 };

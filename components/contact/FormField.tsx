@@ -16,6 +16,9 @@ interface FormFieldProps {
   labelClassName?: string;
   sublabel?: string;
   disabled?: boolean;
+  // New props for enhanced accessibility
+  fieldHint?: string; // Custom field description/hint for screen readers
+  ariaLabel?: string; // Custom aria-label if needed
 }
 
 const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, FormFieldProps>(({
@@ -33,6 +36,8 @@ const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, FormFieldPr
   labelClassName = '',
   sublabel,
   disabled = false,
+  fieldHint,
+  ariaLabel,
 }, ref) => {
   const [focused, setFocused] = useState(false);
   const [animateIn, setAnimateIn] = useState(false);
@@ -45,11 +50,37 @@ const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, FormFieldPr
   const transformTransition = useTransitionStyle('transform', 200, 'ease-out');
   const opacityTransition = useTransitionStyle('opacity', 250, 'ease-out');
   
-  // Handle focus state with animation
+  // Enhanced focus handling with accessibility announcements
   const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFocused(true);
+    
     // Add slight delay to make animation noticeable
-    setTimeout(() => setAnimateIn(true), 5);
+    if (!reducedMotion) {
+      setTimeout(() => setAnimateIn(true), 5);
+    } else {
+      setAnimateIn(true);
+    }
+    
+    // Announce specific guidance for different field types
+    if (type === 'email' && !value) {
+      // Announce format guidance without disrupting the experience
+      const announceGuidance = () => {
+        const liveRegion = document.createElement('div');
+        liveRegion.setAttribute('aria-live', 'polite');
+        liveRegion.setAttribute('class', 'sr-only');
+        document.body.appendChild(liveRegion);
+        
+        setTimeout(() => {
+          liveRegion.textContent = 'Enter email in format name@example.com';
+          
+          setTimeout(() => {
+            document.body.removeChild(liveRegion);
+          }, 3000);
+        }, 500); // Delay to not interrupt other announcements
+      };
+      
+      announceGuidance();
+    }
   };
   
   // Handle blur state with animation
@@ -93,8 +124,12 @@ const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, FormFieldPr
       onFocus: handleFocus,
       onBlur: handleBlur,
       style: { transition: `${borderTransition}, ${shadowTransition}`, ...focusStyle },
+      // Enhanced ARIA attributes
       'aria-invalid': error && touched ? true : false,
-      'aria-describedby': error && touched ? `${id}-error` : undefined,
+      'aria-describedby': `${id}-description ${error && touched ? `${id}-error` : ''}`.trim(),
+      'aria-required': required ? true : undefined,
+      'aria-disabled': disabled ? true : undefined,
+      'aria-label': ariaLabel,
     };
     
     // Forward ref to input element
@@ -121,6 +156,22 @@ const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, FormFieldPr
       );
     }
     
+    // For email fields, add specific ARIA attributes
+    if (type === 'email') {
+      return (
+        <input
+          type="email"
+          {...commonProps}
+          // Email-specific ARIA attributes
+          aria-autocomplete="both"
+          autoComplete="email"
+          inputMode="email"
+          spellCheck="false"
+          ref={setRef as React.RefCallback<HTMLInputElement>}
+        />
+      );
+    }
+    
     return (
       <input
         type={type}
@@ -142,9 +193,19 @@ const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, FormFieldPr
         </label>
       )}
       
+      {/* Field description for screen readers */}
+      <div id={`${id}-description`} className="sr-only">
+        {fieldHint || 
+          (type === 'email' 
+            ? 'Enter email in format name@example.com' 
+            : `Enter ${label.toLowerCase()} information`
+          )
+        }
+      </div>
+      
       {renderInput()}
       
-      {/* Error message with min-height to prevent layout shifts */}
+      {/* Error message with enhanced ARIA */}
       <div 
         style={{ 
           minHeight: '24px', 
@@ -157,6 +218,7 @@ const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, FormFieldPr
             id={`${id}-error`} 
             className="text-red-400 text-[14px] mt-1 error-fade-in"
             role="alert"
+            aria-atomic="true"
           >
             {error}
           </p>

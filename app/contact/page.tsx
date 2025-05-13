@@ -537,7 +537,17 @@ export default function ContactPage() {
       default: // 'idle' or 'validating'
         return (
           <AnimatedFormContainer formState={formState}>
-            <form onSubmit={handleSubmit} className="space-y-[30px] max-w-[800px]" aria-busy={formState === 'validating'}>
+            <form 
+              onSubmit={handleSubmit} 
+              className="space-y-[30px] max-w-[800px]" 
+              aria-busy={formState === 'validating'}
+              aria-describedby="form-description"
+              role="form"
+            >
+              {/* Form description for screen readers */}
+              <div id="form-description" className="sr-only">
+                Contact form with fields for name, email, subject, and message. All fields are required.
+              </div>
             {/* Name Fields */}
             <div>
               <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
@@ -575,7 +585,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Email Field */}
+            {/* Email Field - Enhanced with accessibility */}
             <FormField
               id="email"
               name="email"
@@ -588,6 +598,8 @@ export default function ContactPage() {
               touched={touched.email}
               required={true}
               ref={fieldRefs.email}
+              fieldHint="Enter email address in the format name@example.com. This will be used to contact you."
+              ariaLabel="Email address field"
             />
 
             {/* Subject Field */}

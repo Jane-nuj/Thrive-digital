@@ -53,6 +53,7 @@ Portfolio/freelancer site for Jane Fletcher with clean, minimal design featuring
 - [x] Fix Contact page color usage (white text for Contact link and Send button)
 - [ ] Improve hover transitions on navigation and buttons
 - [x] Add subtle animations for page transitions
+- [x] Add animations for form field interactions and transitions
 - [ ] Add visual flourishes or brand elements to enhance design
 - [ ] Implement consistent button styles across all interactive elements
 - [ ] Optimize mobile header/logo size for different breakpoints
@@ -60,7 +61,7 @@ Portfolio/freelancer site for Jane Fletcher with clean, minimal design featuring
 ## Accessibility
 - [x] Add proper ARIA labels to navigation toggle
 - [x] Ensure form error messages are accessible
-- [ ] Add skip navigation link for keyboard users
+- [x] Add skip navigation link for keyboard users
 - [x] Improve focus visibility on form fields and buttons
 - [x] Test with keyboard navigation and fix tab order issues
 - [ ] Add more descriptive alt text for LinkedIn icon
@@ -68,6 +69,16 @@ Portfolio/freelancer site for Jane Fletcher with clean, minimal design featuring
 - [x] Test form validation for accessibility
 - [ ] Add aria-current for active navigation items
 - [x] Implement proper form labels with accessible error messaging
+- [x] Respect user motion preferences (prefers-reduced-motion)
+- [x] Implement live regions for dynamic content
+- [x] Add proper roles for form states (form, dialog, alertdialog)
+- [x] Add keyboard shortcuts with documentation
+- [x] Implement focus trapping for modal-like components
+- [x] Enhance screen reader announcements
+- [ ] Conduct comprehensive testing with screen readers (VoiceOver, NVDA)
+- [ ] Test with high contrast mode
+- [ ] Test with different zoom levels (200%, 400%)
+- [ ] Create testing matrix for accessibility features
 
 ## SEO & Performance
 - [x] Set basic meta title and description

@@ -37,8 +37,12 @@ export const SuccessMessage = ({ firstName, onReset }: SuccessMessageProps) => {
   return (
     <div 
       className="success-container text-center py-8 fade-in"
-      role="status"
+      role="dialog"
+      aria-labelledby="success-heading"
+      aria-describedby="success-message"
       aria-live="polite"
+      aria-atomic="true"
+      aria-modal="true"
     >
       {/* Centered checkmark icon */}
       <div className={`success-icon flex justify-center mb-8 ${showIcon ? getAnimationClasses('slide-up', 'opacity-100') : 'opacity-0'} transition-opacity duration-300`}>
@@ -49,8 +53,10 @@ export const SuccessMessage = ({ firstName, onReset }: SuccessMessageProps) => {
       </div>
       
       <div className={`${showText ? getAnimationClasses('fade-in', 'opacity-100') : 'opacity-0'} transition-opacity duration-300`}>
-        <h2 className="text-2xl font-manrope mb-4">Message Sent!</h2>
-        <p className="mb-6">
+        <h2 id="success-heading" className="text-2xl font-manrope mb-4">
+          <span className="sr-only">Success: </span>Message Sent!
+        </h2>
+        <p id="success-message" className="mb-6">
           {firstName ? `Thanks for reaching out, ${firstName}. I'll get back to you soon.` : 
                     "Thanks for reaching out. I'll get back to you soon."}
         </p>
@@ -61,9 +67,23 @@ export const SuccessMessage = ({ firstName, onReset }: SuccessMessageProps) => {
           onClick={onReset}
           className="border border-[#b77f0f] text-white py-2 px-6 hover:bg-[#b77f0f] transition-colors duration-300"
           autoFocus
+          aria-keyshortcuts="Alt+N"
+          onKeyDown={(e) => {
+            if (e.altKey && e.key === 'n') {
+              onReset();
+            }
+          }}
         >
           Send another message
         </button>
+        
+        {/* Keyboard shortcut documentation */}
+        <div className="sr-only">
+          Press Alt+N to create a new message.
+        </div>
+        <div className="text-xs mt-4 text-gray-400">
+          Keyboard shortcut: Alt+N
+        </div>
       </div>
     </div>
   );
