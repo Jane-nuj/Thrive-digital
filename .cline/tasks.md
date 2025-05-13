@@ -21,6 +21,7 @@ Portfolio/freelancer site for Jane Fletcher with clean, minimal design featuring
 - [x] Ensure consistent footer across pages
 - [x] Fix hamburger menu icon positioning in mobile view
 - [x] Improve responsive typography for h1 headings
+- [x] Fix contact page title spacing and alignment
 - [ ] Further refine mobile spacing (particularly in hero section)
 - [ ] Add proper spacing between sections on smaller screens
 - [ ] Fix LinkedIn icon size inconsistency between mobile and desktop

@@ -15,6 +15,7 @@ We recently fixed several layout and styling issues:
 7. **Design Consistency**: Improved visual hierarchy by reserving gold color only for accent text like "help"
 8. **Mobile Navigation Alignment**: Fixed hamburger menu icon position to align properly on the right side
 9. **Responsive Typography**: Improved h1 heading display on mobile with responsive font sizes and better text wrapping
+10. **Contact Page Spacing**: Increased vertical spacing between navbar and contact page title for better visual hierarchy
 
 Documentation for these changes has been added to:
 - `.cline/decisions/2025-05-13-layout-and-styling-fixes.md`

@@ -8,6 +8,7 @@ We've made several improvements to enhance the mobile experience:
 
 1. Fixed the hamburger menu icon positioning in the mobile header
 2. Improved the responsive typography for headings, particularly the h1 on the homepage
+3. Fixed contact page spacing issues - increased vertical spacing between navbar and title
 
 ## Implementation Details
 
@@ -46,6 +47,18 @@ The homepage hero heading (h1) was not scaling properly on smaller screens, whic
      <span className="block">and <span className="text-gold">delivered it?</span></span>
    </h1>
    ```
+
+### Contact Page Spacing
+The contact page title was positioned too close to the navigation bar and needed additional vertical spacing. We addressed this by adding specific top padding values:
+
+```tsx
+<div className="bg-charcoal text-white py-12 pt-16 md:py-20 md:pt-24">
+```
+
+This approach:
+1. Maintains the base vertical padding (`py-12 md:py-20`) that's consistent across the site
+2. Adds targeted top padding (`pt-16 md:pt-24`) specifically for the contact page
+3. Uses different values for mobile and desktop to ensure proper spacing across all viewport sizes
 
 This approach provides better control over text wrapping and ensures consistent spacing between lines across all viewport sizes.
 
