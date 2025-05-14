@@ -67,7 +67,7 @@ Visit https://thrive-digital.vercel.app/ to view the site.
 
 The project is currently in development. A staging deployment can be viewed at [https://thrive-digital.vercel.app/](https://thrive-digital.vercel.app/).
 
-See the [tasks.md](tasks.md) file for the current development backlog and upcoming features.
+See the https://github.com/Jane-nuj/Thrive-digital/blob/main/.cline/tasks.md file for the current development backlog and upcoming features.
 
 ## Security Features
 
