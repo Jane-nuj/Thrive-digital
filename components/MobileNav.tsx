@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -87,12 +88,18 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
             <li>
               <Link 
                 href="https://linkedin.com" 
-                className="text-white hover:text-gold font-heading text-h3"
+                className="inline-flex border border-white hover:border-gold hover:text-gold p-2 items-center justify-center transition-colors duration-300"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onClose}
+                aria-label="LinkedIn profile"
               >
-                LinkedIn
+                <Image 
+                  src="/images/linkedinv2-fill.svg" 
+                  alt="LinkedIn" 
+                  width={20} 
+                  height={20} 
+                />
               </Link>
             </li>
           </ul>
