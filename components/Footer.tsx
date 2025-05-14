@@ -14,14 +14,14 @@ export default function Footer() {
           {!isContactPage ? (
             <>
               If you think I'd be a good fit for your team,{' '}
-              <Link href="/contact" className="text-gold underline hover:text-gold font-sans">
+              <Link href="/contact" className="text-gold underline hover:text-gold font-sans transition-colors duration-300">
                 drop me a line
               </Link>
               .
             </>
           ) : (
             <>
-              Let me know how I can <Link href="/" className="text-gold underline hover:text-gold font-sans">help</Link>
+              Let me know how I can <Link href="/" className="text-gold underline hover:text-gold font-sans transition-colors duration-300">help</Link>
             </>
           )}
         </p>

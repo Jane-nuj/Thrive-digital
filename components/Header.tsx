@@ -26,7 +26,7 @@ export default function Header() {
           <div className="hidden md:flex items-center space-x-6 ml-auto">
             <Link 
               href="/contact" 
-              className={`${pathname === '/contact' ? 'border-b-2 border-gold' : 'hover:text-gold'} font-sans text-p1 flex items-center`}
+              className={`${pathname === '/contact' ? 'border-b-2 border-gold' : 'hover:text-gold'} font-sans text-p1 flex items-center transition-colors duration-300`}
               style={pathname === '/contact' ? { color: '#ffffff' } : {}}  
             >
               Contact
@@ -35,7 +35,7 @@ export default function Header() {
               href="https://linkedin.com" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="border border-white hover:border-gold hover:text-gold p-2 flex items-center justify-center transition-colors"
+              className="border border-white hover:border-gold hover:text-gold p-2 flex items-center justify-center transition-colors duration-300"
               aria-label="LinkedIn profile"
             >
               <Image 
@@ -50,7 +50,7 @@ export default function Header() {
           {/* Mobile Navigation Toggle */}
           <div className="md:hidden ml-auto">
             <button 
-              className="text-white hover:text-gold focus:outline-none transition-colors"
+              className="text-white hover:text-gold focus:outline-none transition-colors duration-300"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle mobile menu"
             >
