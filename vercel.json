@@ -5,7 +5,7 @@
       "src": "package.json",
       "use": "@vercel/next",
       "config": {
-        "installCommand": "npm install && npm install framer-motion resend"
+        "installCommand": "npm install && npm install --save-dev typescript @types/react @types/node && npm install framer-motion resend"
       }
     }
   ]
