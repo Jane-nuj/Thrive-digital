@@ -16,7 +16,7 @@ Thrive Digital is a lean, accessible, and performance-focused website built with
 
 ## Key Features
 
-- **Responsive Design**: Optimized for all device sizes
+- **Responsive Design**: Optimised for all device sizes
 - **Accessibility Focus**: WCAG compliance with enhanced ARIA attributes and screen reader support
 - **Motion Preferences**: Respects user motion preferences with reduced-motion alternatives
 - **Contact Form**: Fully accessible with comprehensive validation, visual feedback, and security features
@@ -24,13 +24,13 @@ Thrive Digital is a lean, accessible, and performance-focused website built with
 
 ## Development Phases
 
-The project was developed incrementally across several phases:
+The project is being developed incrementally across several phases:
 
-1. **Core Site Structure & Design**: Initial layout and responsive framework
-2. **Form Validation**: Client-side form validation and error handling
-3. **Visual Feedback**: Enhanced state transitions and animations
-4. **Accessibility Enhancements**: ARIA implementation and screen reader support
-5. **Security & Integration**: Email service integration with security measures
+1. **Core Site Structure & Design**: Initial layout and responsive framework - done
+2. **Form Validation**: Client-side form validation and error handling - done
+3. **Visual Feedback**: Enhanced state transitions and animations - done
+4. **Accessibility Enhancements**: ARIA implementation and screen reader support - done
+5. **Security & Integration**: Email service integration with security measures - in progress
 
 ## Getting Started
 
