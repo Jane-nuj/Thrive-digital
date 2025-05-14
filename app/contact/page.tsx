@@ -91,7 +91,8 @@ const validateMessage = (value: string): string => {
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", subject: "", message: "" });
+  // Add honeypot field to form state
+  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", subject: "", message: "", honeypot: "" });
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [touched, setTouched] = useState<TouchedFields>({});
   
@@ -190,7 +191,7 @@ export default function ContactPage() {
 
   // Reset form function 
   const resetForm = () => {
-    setForm({ firstName: "", lastName: "", email: "", subject: "", message: "" });
+    setForm({ firstName: "", lastName: "", email: "", subject: "", message: "", honeypot: "" });
     setErrors({});
     setTouched({});
     setFormState('idle');
@@ -548,6 +549,29 @@ export default function ContactPage() {
               <div id="form-description" className="sr-only">
                 Contact form with fields for name, email, subject, and message. All fields are required.
               </div>
+              
+              {/* Honeypot field - hidden from users but accessible to bots */}
+              <input
+                type="text"
+                name="honeypot"
+                id="honeypot"
+                value={form.honeypot}
+                onChange={handleChange}
+                tabIndex={-1}
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  width: '1px',
+                  height: '1px',
+                  padding: '0',
+                  margin: '-1px',
+                  overflow: 'hidden',
+                  clip: 'rect(0, 0, 0, 0)',
+                  whiteSpace: 'nowrap',
+                  border: '0'
+                }}
+                autoComplete="off"
+              />
             {/* Name Fields */}
             <div>
               <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>

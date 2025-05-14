@@ -4,6 +4,7 @@
 # Node.js
 node_modules/
 .env
+.env.local
 .next/
 dist/
 out/
