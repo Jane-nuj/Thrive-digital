@@ -1,7 +1,7 @@
 # Thrive Digital Site - Development Context
 
 ## Project Overview
-This is a portfolio/freelancer website for Jane Fletcher featuring a clean, minimal design with dark charcoal background and gold accents. The site uses Manrope for headings and Poppins for body text, and features a mobile-first responsive layout with a working contact form.
+This is a portfolio/freelancer website for Jane F featuring a clean, minimal design with dark charcoal background and gold accents. The site uses Manrope for headings and Poppins for body text, and features a mobile-first responsive layout with a working contact form.
 
 ## Recent Updates (2025-05-14)
 ### Contact Form Enhancement Completion
