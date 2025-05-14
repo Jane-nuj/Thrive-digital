@@ -304,49 +304,46 @@ export default function ContactPage() {
             
             <form onSubmit={handleSubmit} className="space-y-[30px] max-w-[800px] mt-6">
                 {/* Name Fields */}
-              <div>
-                <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
-                <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
-                  <div className="flex-1">
-                    <label htmlFor="firstName" className="block text-[14px] text-white opacity-80 mb-1">First Name</label>
-                    <input 
-                      id="firstName" 
-                      name="firstName" 
-                      value={form.firstName}
-                      ref={fieldRefs.firstName}
-                      required 
-                      className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.firstName && touched.firstName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      aria-invalid={errors.firstName && touched.firstName ? "true" : "false"}
-                      aria-describedby={errors.firstName && touched.firstName ? "firstName-error" : undefined}
-                    />
-                    {errors.firstName && touched.firstName && (
-                      <p id="firstName-error" className="text-red-400 text-[14px] mt-1">
-                        {errors.firstName}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <label htmlFor="lastName" className="block text-[14px] text-white opacity-80 mb-1">Last Name</label>
-                    <input 
-                      id="lastName"
-                      name="lastName" 
-                      value={form.lastName}
-                      ref={fieldRefs.lastName}
-                      required 
-                      className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.lastName && touched.lastName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      aria-invalid={errors.lastName && touched.lastName ? "true" : "false"}
-                      aria-describedby={errors.lastName && touched.lastName ? "lastName-error" : undefined}
-                    />
-                    {errors.lastName && touched.lastName && (
-                      <p id="lastName-error" className="text-red-400 text-[14px] mt-1">
-                        {errors.lastName}
-                      </p>
-                    )}
-                  </div>
+              <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
+                <div className="flex-1">
+                  <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">First Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                  <input 
+                    id="firstName" 
+                    name="firstName" 
+                    value={form.firstName}
+                    ref={fieldRefs.firstName}
+                    required 
+                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.firstName && touched.firstName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    aria-invalid={errors.firstName && touched.firstName ? "true" : "false"}
+                    aria-describedby={errors.firstName && touched.firstName ? "firstName-error" : undefined}
+                  />
+                  {errors.firstName && touched.firstName && (
+                    <p id="firstName-error" className="text-red-400 text-[14px] mt-1">
+                      {errors.firstName}
+                    </p>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <label htmlFor="lastName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Last Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
+                  <input 
+                    id="lastName"
+                    name="lastName" 
+                    value={form.lastName}
+                    ref={fieldRefs.lastName}
+                    required 
+                    className={`w-full py-[8px] px-0 bg-transparent border-b ${errors.lastName && touched.lastName ? 'border-red-500' : 'border-[rgba(255,255,255,0.3)]'} focus:outline-none focus:border-gold transition-colors font-sans text-white`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    aria-invalid={errors.lastName && touched.lastName ? "true" : "false"}
+                    aria-describedby={errors.lastName && touched.lastName ? "lastName-error" : undefined}
+                  />
+                  {errors.lastName && touched.lastName && (
+                    <p id="lastName-error" className="text-red-400 text-[14px] mt-1">
+                      {errors.lastName}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -437,41 +434,38 @@ export default function ContactPage() {
             <form className="space-y-[30px] max-w-[800px] form-submitting">
               {/* Form fields with the same structure but all disabled */}
               {/* Name Fields */}
-              <div>
-                <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
-                <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
-                  <div className="flex-1">
-                    <FormField
-                      id="firstName"
-                      name="firstName"
-                      label="First Name"
-                      value={form.firstName}
-                      onChange={() => {}}
-                      onBlur={() => {}}
-                      error=""
-                      touched={false}
-                      required={true}
-                      labelClassName="text-[14px] text-white opacity-80"
-                      className="cursor-not-allowed"
-                      disabled
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <FormField
-                      id="lastName"
-                      name="lastName"
-                      label="Last Name"
-                      value={form.lastName}
-                      onChange={() => {}}
-                      onBlur={() => {}}
-                      error=""
-                      touched={false}
-                      required={true}
-                      labelClassName="text-[14px] text-white opacity-80"
-                      className="cursor-not-allowed"
-                      disabled
-                    />
-                  </div>
+              <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
+                <div className="flex-1">
+                  <FormField
+                    id="firstName"
+                    name="firstName"
+                    label="First Name"
+                    value={form.firstName}
+                    onChange={() => {}}
+                    onBlur={() => {}}
+                    error=""
+                    touched={false}
+                    required={true}
+                    labelClassName="text-[18px] tracking-[0.5px] text-white"
+                    className="cursor-not-allowed"
+                    disabled
+                  />
+                </div>
+                <div className="flex-1">
+                  <FormField
+                    id="lastName"
+                    name="lastName"
+                    label="Last Name"
+                    value={form.lastName}
+                    onChange={() => {}}
+                    onBlur={() => {}}
+                    error=""
+                    touched={false}
+                    required={true}
+                    labelClassName="text-[18px] tracking-[0.5px] text-white"
+                    className="cursor-not-allowed"
+                    disabled
+                  />
                 </div>
               </div>
 
@@ -573,39 +567,36 @@ export default function ContactPage() {
                 autoComplete="off"
               />
             {/* Name Fields */}
-            <div>
-              <label htmlFor="firstName" className="block text-[18px] tracking-[0.5px] text-white mb-2">Name <span className="text-[13px] text-white opacity-65">(required)</span></label>
-              <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
-                <div className="flex-1">
-                  <FormField
-                    id="firstName"
-                    name="firstName"
-                    label="First Name"
-                    value={form.firstName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={errors.firstName}
-                    touched={touched.firstName}
-                    required={true}
-                    labelClassName="text-[14px] text-white opacity-80"
-                    ref={fieldRefs.firstName}
-                  />
-                </div>
-                <div className="flex-1">
-                  <FormField
-                    id="lastName"
-                    name="lastName"
-                    label="Last Name"
-                    value={form.lastName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={errors.lastName}
-                    touched={touched.lastName}
-                    required={true}
-                    labelClassName="text-[14px] text-white opacity-80"
-                    ref={fieldRefs.lastName}
-                  />
-                </div>
+            <div className="flex flex-col md:flex-row gap-6 md:gap-[30px]">
+              <div className="flex-1">
+                <FormField
+                  id="firstName"
+                  name="firstName"
+                  label="First Name"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={errors.firstName}
+                  touched={touched.firstName}
+                  required={true}
+                  labelClassName="text-[18px] tracking-[0.5px] text-white"
+                  ref={fieldRefs.firstName}
+                />
+              </div>
+              <div className="flex-1">
+                <FormField
+                  id="lastName"
+                  name="lastName"
+                  label="Last Name"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={errors.lastName}
+                  touched={touched.lastName}
+                  required={true}
+                  labelClassName="text-[18px] tracking-[0.5px] text-white"
+                  ref={fieldRefs.lastName}
+                />
               </div>
             </div>
 
