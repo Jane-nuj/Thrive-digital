@@ -57,7 +57,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Visit `http://localhost:3000` to view the site.
+Visit https://thrive-digital.vercel.app/ to view the site.
 
 ## Environment Variables
 
