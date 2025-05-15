@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function PrivacyPolicyPage() {
   return (
-    <main id="main-content" tabIndex={-1} className="pb-12 pt-16 md:pb-20 md:pt-24">
+    <main id="main-content" tabIndex={-1} className="pb-12 mt-20 md:pb-20 md:mt-24">
       <div className="layout-container">
         <div className="content-padding">
           
