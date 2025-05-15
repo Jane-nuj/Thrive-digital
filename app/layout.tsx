@@ -20,8 +20,50 @@ const manrope = Manrope({
 });
 
 export const metadata = {
+  metadataBase: new URL('https://thrivedigital.example.com'),
   title: "Thrive Digital – Jane Fletcher",
   description: "Product, strategy and delivery – from concept to launch.",
+  
+  // Open Graph
+  openGraph: {
+    title: "Thrive Digital – Jane Fletcher",
+    description: "Product, strategy and delivery – from concept to launch.",
+    url: '/',
+    siteName: 'Thrive Digital',
+    images: [
+      {
+        url: '/images/thriveHeader logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Thrive Digital',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  
+  // Twitter
+  twitter: {
+    card: 'summary_large_image',
+    title: "Thrive Digital – Jane Fletcher",
+    description: "Product, strategy and delivery – from concept to launch.",
+    images: ['/images/thriveHeader logo.png'],
+    creator: '@janefletcher',
+  },
+  
+  // Additional metadata
+  themeColor: '#b77f0f',
+  applicationName: 'Thrive Digital',
+  keywords: ['digital strategy', 'product development', 'digital transformation'],
+  authors: [{ name: 'Jane Fletcher' }],
+  creator: 'Jane Fletcher',
+  publisher: 'Thrive Digital',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  canonical: '/',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
