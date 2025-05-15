@@ -1,6 +1,6 @@
 export default function HomePage() {
   return (
-    <div className="py-12 md:py-20">
+    <div className="pb-12 mt-20 md:pb-20 md:mt-24">
       <div className="layout-container">
         <div className="content-padding">
 
